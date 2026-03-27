@@ -10,7 +10,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 [![Anthropic](https://img.shields.io/badge/Powered%20by-Claude%20AI-blueviolet?style=for-the-badge)](https://www.anthropic.com/)
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://abhay-parth.vercel.app)
+[![Vercel](https://img.shields.io/badge/Vercel-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://abhay-parth.vercel.app)
+[![Render](https://img.shields.io/badge/Render-Demo-46E3B7?style=for-the-badge&logo=render)](https://abhayparth.onrender.com)
 
 </div>
 
@@ -187,7 +188,10 @@ Built with ❤️ by four students who believe better tools make better toppers.
 
 ## 🌐 Live Demo
 
-👉 **[abhay-parth.vercel.app](https://abhay-parth.vercel.app)**
+| Platform | Link |
+|---|---|
+| Vercel | 👉 [abhay-parth.vercel.app](https://abhay-parth.vercel.app) |
+| Render | 👉 [abhayparth.onrender.com](https://abhayparth.onrender.com) |
 
 ---
 
