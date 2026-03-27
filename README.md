@@ -1,132 +1,208 @@
-# AbhayParth
+<div align="center">
 
-AI-powered study companion for Indian competitive exam preparation, built with Next.js and TypeScript.
+# 🏆 AbhayParth
+### *Train Like Parth. Think Without Fear.*
 
-## What This Project Does
+**🥉 3rd Place — Dev Clash @ Anantya'26, NIT Raipur**
+*Organized by Aavartan | Hosted on Unstop*
 
-AbhayParth combines guided study planning, AI tutoring, spaced repetition, and question practice in one app.
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Anthropic](https://img.shields.io/badge/Powered%20by-Claude%20AI-blueviolet?style=for-the-badge)](https://www.anthropic.com/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://abhay-parth.vercel.app)
 
-Core modules:
+</div>
 
-- Dashboard: progress snapshot, streaks, countdown, and analytics
-- AI Tutor: conversational doubt-solving and explanations
-- Retention Engine: SM-2 based concept review workflow
-- Study Lab: YouTube video to structured notes pipeline
-- Practice Arena: generated practice sets with analysis
-- Planner: 7-day schedule generation and session organization
+---
 
-## Tech Stack
+## 🎯 What is AbhayParth?
 
-- Next.js 14 (App Router)
-- TypeScript
-- Tailwind CSS
-- SQLite (`better-sqlite3`)
-- Zustand
-- Recharts
-- Framer Motion
-- Lucide React
-- `@dnd-kit` (drag and drop)
+**AbhayParth** is an AI-powered study companion purpose-built for Indian competitive exam aspirants — JEE, NEET, UPSC, and beyond. Named after the fearless archer Arjuna (Parth), it combines the power of large language models with scientifically-backed learning techniques to make every study session count.
 
-## Prerequisites
+No more scattered notes. No more forgotten concepts. No more aimless grinding.
 
+> *"Most students don't fail because they lack intelligence. They fail because they lack the right system."*
+
+AbhayParth **is** that system.
+
+---
+
+## ✨ Features
+
+### 📊 Dashboard
+A bird's-eye view of your preparation journey — study streaks, daily progress, exam countdown, and analytics — all in one glanceable screen.
+
+### 🤖 AI Tutor
+A conversational doubt-solving engine powered by Claude AI. Ask anything — from thermodynamics to organic chemistry to polity — and get clear, exam-oriented explanations instantly.
+
+### 🧠 Retention Engine
+Built on the **SM-2 spaced repetition algorithm**, the Retention Engine surfaces concepts at the exact moment your brain is about to forget them — maximizing long-term retention with minimum effort.
+
+### 🎬 Study Lab
+Paste any YouTube lecture URL and get back a structured set of notes, key points, and summaries. Turn hours of video into scannable, reviewable knowledge in seconds.
+
+### 📝 Practice Arena
+Generates targeted practice sets based on your weak areas, followed by detailed performance analysis to close the loop on learning.
+
+### 📅 Smart Planner
+Automatically generates a 7-day personalized study schedule, with drag-and-drop session management so you stay in control.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 14 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| AI Engine | Anthropic Claude (via API) |
+| Database | SQLite (`better-sqlite3`) |
+| State Management | Zustand |
+| Charts | Recharts |
+| Animations | Framer Motion |
+| Icons | Lucide React |
+| Drag & Drop | `@dnd-kit` |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
 - Node.js 18+
 - npm
+- An [Anthropic API key](https://console.anthropic.com/)
 
-## Quick Start
-
-1. Clone and install dependencies.
+### Installation
 
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Roxtop07/AbhayParth.git
 cd AbhayParth
+
+# 2. Install dependencies
 npm install
-```
 
-2. Create an environment file.
-
-```bash
+# 3. Set up environment variables
 cat > .env.local << 'EOF'
 ANTHROPIC_API_KEY=your_api_key_here
 DATABASE_PATH=./abhayparth.db
 EOF
+
+# 4. Start the development server
+npm run dev
 ```
 
-3. Start development server.
+Open [http://localhost:3000](http://localhost:3000) and start your prep! 🎯
+
+---
+
+## 📁 Project Structure
+
+```
+AbhayParth/
+├── app/
+│   ├── api/
+│   │   ├── analytics/
+│   │   ├── auth/
+│   │   ├── concepts/
+│   │   ├── lab/
+│   │   ├── planner/
+│   │   ├── practice/
+│   │   └── tutor/
+│   ├── dashboard/
+│   ├── lab/
+│   ├── planner/
+│   ├── practice/
+│   ├── retention/
+│   └── tutor/
+├── components/
+│   ├── lab/
+│   ├── layout/
+│   ├── planner/
+│   ├── practice/
+│   ├── retention/
+│   ├── tutor/
+│   └── ui/
+├── lib/
+│   ├── api.ts          # API utilities
+│   ├── auth.ts         # Authentication logic
+│   ├── claude.ts       # Claude AI integration
+│   ├── db.ts           # SQLite DB setup (auto-initializes tables)
+│   ├── sm2.ts          # SM-2 spaced repetition algorithm
+│   └── youtube.ts      # YouTube transcript pipeline
+├── store/              # Zustand state stores
+└── types/              # Shared TypeScript types
+```
+
+---
+
+## ⚙️ Environment Variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | ✅ Yes | Your Anthropic API key for Claude AI |
+| `DATABASE_PATH` | ❌ Optional | Path to SQLite file (defaults to `./abhayparth.db`) |
+
+> ⚠️ Never commit your `.env.local` file. The database auto-initializes on first server start.
+
+---
+
+## 📜 Available Scripts
 
 ```bash
-npm run dev
-```'
+npm run dev       # Start local development server
+npm run build     # Build production bundle
+npm run start     # Run production server
+npm run lint      # Run ESLint
+npm run db:reset  # Reset the SQLite database
+```
 
-4. Open http://localhost:3000
+---
 
-## Environment Variables
+## 🏅 Hackathon
 
-- `ANTHROPIC_API_KEY`: API key used by the AI completion layer
-- `DATABASE_PATH` (optional): SQLite file path (defaults to `./abhayparth.db`)
+This project was built for **Dev Clash**, part of **Anantya'26** — the annual technical fest of **NIT Raipur**, organized by **Aavartan**.
 
-## Available Scripts
+🥉 **We secured 3rd Place** out of all participating teams.
 
-- `npm run dev`: start local development server
-- `npm run build`: build production bundle
-- `npm run start`: run production server
-- `npm run lint`: run ESLint
-- `npm run db:reset`: reset DB (script command exists in `package.json`)
+The challenge demanded a functional, impactful product built within strict time constraints. AbhayParth was conceived, designed, and shipped from scratch during the hackathon.
 
-## High-Level Structure
+**[View the hackathon on Unstop →](https://unstop.com/hackathons/dev-clash-anantya26-events-by-aavartan-national-institute-of-technology-nit-raipur-1655705)**
 
-```text
-app/
-   api/
-      analytics/
-      auth/
-      concepts/
-      lab/
-      planner/
-      practice/
-      tutor/
-   dashboard/
-   lab/
-   login/
-   planner/
-   practice/
-   register/
-   retention/
-   tutor/
+---
 
-components/
-   lab/
-   layout/
-   planner/
-   practice/
-   retention/
-   tutor/
-   ui/
+## 👥 Team
 
-lib/
-   api.ts
-   auth.ts
-   claude.ts
-   db.ts
-   sm2.ts
-   youtube.ts
+Built with ❤️ by four students who believe better tools make better toppers.
 
-store/
-types/
-```'
+| Name | Role |
+|---|---|
+| **Manish Srivastav** | Team Lead · Backend & Frontend |
+| **Aakash Sarang** | Full Stack & AI Integration |
+| **Shreya Jaiswal** | Frontend, UI/UX & Architecture |
 
-## Notes
+---
 
-- Database tables are initialized automatically when server code imports `lib/db.ts`.
-- The app currently includes multiple API endpoints under `app/api/*` for auth, tutor, planner, practice, lab, and analytics flows.
-- For production use, configure secrets only via environment variables and rotate any previously exposed keys.
+## 🌐 Live Demo
 
-## Contributing
+👉 **[abhay-parth.vercel.app](https://abhay-parth.vercel.app)**
 
-1. Create a feature branch.
-2. Make your changes.
-3. Run lint/build locally.
-4. Open a pull request.
+---
 
-## License
+## 📄 License
 
-MIT made by Manish,Aakash & Shreya
+MIT © 2025 Team AbhayParth — Manish Srivastav, Aakash Sarang & Shreya Jaiswal.
+
+---
+
+<div align="center">
+
+*"Arjuna didn't become the greatest archer by practicing randomly. He had a system."*
+
+**AbhayParth gives you that system.**
+
+⭐ Star this repo if it inspired you!
+
+</div>
