@@ -1,10 +1,12 @@
 <div align="center">
 
-# 🏆 AbhayParth
+# 🏆 Abhay Parth
 ### *Train Like Parth. Think Without Fear.*
 
 **🥉 3rd Place — Dev Clash @ Anantya'26, NIT Raipur**
 *Organized by Aavartan | Hosted on Unstop*
+
+> 👥 **Team Name:** Tech Stackers
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -174,7 +176,7 @@ The challenge demanded a functional, impactful product built within strict time 
 
 ---
 
-## 👥 Team
+## 👥 Team — Tech Stackers
 
 Built with ❤️ by four students who believe better tools make better toppers.
 
