@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 
 // Note: In Next.js App Router, this file runs on the server.
-const dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), 'abhayparth.db');
+const dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), 'mentor.db');
 const db = new Database(dbPath, { timeout: 15000 });
 
 db.pragma('journal_mode = WAL');
@@ -20,6 +20,7 @@ export function initializeDB() {
 
     CREATE TABLE IF NOT EXISTS generated_notes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
       topic TEXT NOT NULL,
       subtopic TEXT NOT NULL,
       summary TEXT NOT NULL,
@@ -36,6 +37,7 @@ export function initializeDB() {
 
     CREATE TABLE IF NOT EXISTS concepts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
       topic TEXT NOT NULL,
       subtopic TEXT NOT NULL,
       summary TEXT NOT NULL,
@@ -52,6 +54,7 @@ export function initializeDB() {
 
     CREATE TABLE IF NOT EXISTS sessions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
       session_type TEXT NOT NULL,
       subject TEXT,
       duration_minutes INTEGER DEFAULT 0,
@@ -63,6 +66,7 @@ export function initializeDB() {
 
     CREATE TABLE IF NOT EXISTS plans (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
       exam TEXT NOT NULL,
       exam_date TEXT NOT NULL,
       daily_hours INTEGER NOT NULL,
@@ -73,6 +77,7 @@ export function initializeDB() {
 
     CREATE TABLE IF NOT EXISTS test_results (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
       subject TEXT NOT NULL,
       topic TEXT,
       difficulty TEXT NOT NULL,
@@ -87,6 +92,7 @@ export function initializeDB() {
 
     CREATE TABLE IF NOT EXISTS conversations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
       session_id TEXT NOT NULL,
       role TEXT NOT NULL,
       content TEXT NOT NULL,
@@ -115,15 +121,67 @@ export function initializeDB() {
       last_active TEXT,
       created_at TEXT DEFAULT (datetime('now'))
     );
+
+    CREATE TABLE IF NOT EXISTS evaluations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
+      subject TEXT NOT NULL,
+      question TEXT NOT NULL,
+      student_answer TEXT NOT NULL,
+      score INTEGER NOT NULL,
+      feedback TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS learning_paths (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
+      target_exam TEXT NOT NULL,
+      current_level TEXT NOT NULL,
+      path_json TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS saved_resources (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT,
+      title TEXT NOT NULL,
+      type TEXT NOT NULL,
+      url TEXT,
+      description TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS reports (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT NOT NULL,
+      week_start TEXT NOT NULL,
+      week_end TEXT NOT NULL,
+      report_markdown TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
   `);
+
+  // Migrate existing tables to add user_id
+  const tablesToMigrate = ['generated_notes', 'conversations', 'evaluations', 'learning_paths', 'concepts', 'sessions', 'plans', 'test_results'];
+  for (const table of tablesToMigrate) {
+    try {
+      db.exec(`ALTER TABLE ${table} ADD COLUMN user_id TEXT`);
+    } catch (e: any) {
+      // Ignore if column already exists
+      if (!e.message.includes('duplicate column name')) {
+        console.error(`Migration error for ${table}:`, e.message);
+      }
+    }
+  }
 
   // Seed Concepts if empty
   const count = db.prepare('SELECT COUNT(*) as c FROM concepts').get() as { c: number };
   if (count.c === 0) {
     const todayISO = new Date().toISOString().slice(0, 10);
     const insertConcept = db.prepare(`
-      INSERT INTO concepts (topic, subtopic, summary, tags, ef, interval, reps, strength, next_review)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO concepts (user_id, topic, subtopic, summary, tags, ef, interval, reps, strength, next_review)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const SEED_CONCEPTS = [
@@ -140,7 +198,7 @@ export function initializeDB() {
 
     const initTransaction = db.transaction(() => {
         for (const c of SEED_CONCEPTS) {
-            insertConcept.run(c.topic, c.subtopic, c.summary, c.tags, c.ef, c.interval, c.reps, c.strength, todayISO);
+            insertConcept.run('anonymous', c.topic, c.subtopic, c.summary, c.tags, c.ef, c.interval, c.reps, c.strength, todayISO);
         }
     });
 

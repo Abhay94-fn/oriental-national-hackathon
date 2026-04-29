@@ -3,6 +3,14 @@ import { NextResponse } from 'next/server';
 import { completeJSON } from '../../../lib/claude';
 import db from '../../../lib/db';
 import { Question } from '../../../types';
+import { cookies } from 'next/headers';
+import { verifySessionToken } from '../../../lib/auth';
+
+function getUserId(): string {
+  const token = cookies().get('abhay_session')?.value;
+  const session = token ? verifySessionToken(token) : null;
+  return session?.userId || 'anonymous';
+}
 
 export async function POST(request: Request) {
   try {
@@ -58,20 +66,21 @@ Example JSON output format:
 // Optionally, a route to save results
 export async function PUT(request: Request) {
    try {
+      const userId = getUserId();
       const result = await request.json();
       db.prepare(`
-         INSERT INTO test_results (subject, topic, difficulty, total_questions, correct, score_pct, time_per_q_avg, weak_concepts, questions_json)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+         INSERT INTO test_results (user_id, subject, topic, difficulty, total_questions, correct, score_pct, time_per_q_avg, weak_concepts, questions_json)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
-         result.subject, result.topic, result.difficulty, result.totalQuestions, result.correct, 
+         userId, result.subject, result.topic, result.difficulty, result.totalQuestions, result.correct,
          result.scorePct, result.timePerQAvg, JSON.stringify(result.weakConcepts), JSON.stringify(result.questionsJson)
       );
 
       // Log session
       db.prepare(`
-         INSERT INTO sessions (session_type, subject, duration_minutes, concepts_reviewed, score_pct)
-         VALUES ('practice', ?, ?, 0, ?)
-      `).run(result.subject, Math.ceil((result.timePerQAvg * result.totalQuestions)/60), result.scorePct);
+         INSERT INTO sessions (user_id, session_type, subject, duration_minutes, concepts_reviewed, score_pct)
+         VALUES (?, 'practice', ?, ?, 0, ?)
+      `).run(userId, result.subject, Math.ceil((result.timePerQAvg * result.totalQuestions) / 60), result.scorePct);
 
       return NextResponse.json({ success: true });
    } catch (e) {

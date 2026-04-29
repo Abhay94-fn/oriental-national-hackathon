@@ -67,7 +67,7 @@ export function VoiceInput({ language, onTranscript, onVoiceEnd }: { language: s
     <button
       type="button"
       onClick={toggleListen}
-      className={`p-3 rounded-full transition-all shrink-0 ${isListening ? 'bg-red-500 text-white animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-surface border border-border text-muted hover:text-white hover:bg-card-2'}`}
+      className={`p-3 rounded-full transition-all shrink-0 ${isListening ? 'bg-red-500 text-white animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-surface border border-border text-muted hover:text-foreground hover:bg-card-2'}`}
       title={isListening ? 'Stop listening' : 'Use voice input'}
     >
       {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}

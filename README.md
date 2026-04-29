@@ -1,7 +1,7 @@
 <div align="center">
 
-# 🏆 Abhay Parth
-### *Train Like Parth. Think Without Fear.*
+# 🏆 Mentor
+### *Guidance when you need it most.*
 
 **🥉 3rd Place — Dev Clash @ Anantya'26, NIT Raipur**
 *Organized by Aavartan | Hosted on Unstop*
@@ -19,15 +19,15 @@
 
 ---
 
-## 🎯 What is AbhayParth?
+## 🎯 What is Mentor?
 
-**AbhayParth** is an AI-powered study companion purpose-built for Indian competitive exam aspirants — JEE, NEET, UPSC, and beyond. Named after the fearless archer Arjuna (Parth), it combines the power of large language models with scientifically-backed learning techniques to make every study session count.
+**Mentor** is an AI-powered study companion purpose-built for Indian competitive exam aspirants — JEE, NEET, UPSC, and beyond. Named after the fearless archer Arjuna (Parth), it combines the power of large language models with scientifically-backed learning techniques to make every study session count.
 
 No more scattered notes. No more forgotten concepts. No more aimless grinding.
 
 > *"Most students don't fail because they lack intelligence. They fail because they lack the right system."*
 
-AbhayParth **is** that system.
+Mentor **is** that system.
 
 ---
 
@@ -90,7 +90,7 @@ npm install
 # 3. Set up environment variables
 cat > .env.local << 'EOF'
 ANTHROPIC_API_KEY=your_api_key_here
-DATABASE_PATH=./abhayparth.db
+DATABASE_PATH=./mentor.db
 EOF
 
 # 4. Start the development server
@@ -146,7 +146,7 @@ AbhayParth/
 | Variable | Required | Description |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | ✅ Yes | Your Anthropic API key for Claude AI |
-| `DATABASE_PATH` | ❌ Optional | Path to SQLite file (defaults to `./abhayparth.db`) |
+| `DATABASE_PATH` | ❌ Optional | Path to SQLite file (defaults to `./mentor.db`) |
 
 > ⚠️ Never commit your `.env.local` file. The database auto-initializes on first server start.
 
@@ -170,7 +170,7 @@ This project was built for **Dev Clash**, part of **Anantya'26** — the annual 
 
 🥉 **We secured 3rd Place** out of all participating teams.
 
-The challenge demanded a functional, impactful product built within strict time constraints. AbhayParth was conceived, designed, and shipped from scratch during the hackathon.
+The challenge demanded a functional, impactful product built within strict time constraints. Mentor was conceived, designed, and shipped from scratch during the hackathon.
 
 **[View the hackathon on Unstop →](https://unstop.com/hackathons/dev-clash-anantya26-events-by-aavartan-national-institute-of-technology-nit-raipur-1655705)**
 
@@ -199,7 +199,7 @@ Built with ❤️ by four students who believe better tools make better toppers.
 
 ## 📄 License
 
-MIT © 2025 Team AbhayParth — Manish Srivastav, Aakash Sarang & Shreya Jaiswal.
+MIT © 2025 Team Mentor — Manish Srivastav, Aakash Sarang & Shreya Jaiswal.
 
 ---
 
@@ -207,7 +207,7 @@ MIT © 2025 Team AbhayParth — Manish Srivastav, Aakash Sarang & Shreya Jaiswal
 
 *"Arjuna didn't become the greatest archer by practicing randomly. He had a system."*
 
-**AbhayParth gives you that system.**
+**Mentor gives you that system.**
 
 ⭐ Star this repo if it inspired you!
 

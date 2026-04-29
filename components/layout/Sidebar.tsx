@@ -3,101 +3,91 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '../../store/useStore';
-import { LayoutDashboard, Brain, CalendarDays, Dumbbell, Bot, Youtube, Menu, X } from 'lucide-react';
+import Image from 'next/image';
+import { LayoutDashboard, Brain, CalendarDays, Dumbbell, Bot, Youtube, BookOpen, Route, FileText, CheckSquare, Archive } from 'lucide-react';
 import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const MODULES = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { name: 'Recommendations', path: '/recommendations', icon: BookOpen },
+  { name: 'Learning Path', path: '/learning-path', icon: Route },
+  { name: 'Study Notes', path: '/notes', icon: FileText },
+  { name: 'Assignment Eval', path: '/evaluate', icon: CheckSquare },
   { name: 'Retention', path: '/retention', icon: Brain },
   { name: 'Planner', path: '/planner', icon: CalendarDays },
   { name: 'Practice', path: '/practice', icon: Dumbbell },
   { name: 'AI Tutor', path: '/tutor', icon: Bot },
   { name: 'Content Lab', path: '/lab', icon: Youtube },
+  { name: 'Archive', path: '/archive', icon: Archive },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const { sidebarCollapsed, toggleSidebar, setCurrentModule, profile } = useStore();
 
-  useEffect(() => {
-    setCurrentModule(pathname);
-  }, [pathname, setCurrentModule]);
+  useEffect(() => { setCurrentModule(pathname); }, [pathname, setCurrentModule]);
 
   return (
-    <>
-      <div className={`fixed inset-y-0 left-0 z-50 transform md:relative md:translate-x-0 transition-all duration-300 ease-in-out bg-surface border-r border-border flex flex-col ${sidebarCollapsed ? 'w-20' : 'w-64'} ${sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'}`}>
-        <div className="flex items-center justify-between p-4 h-16 border-b border-border">
+    <motion.div
+      animate={{ width: sidebarCollapsed ? 72 : 256 }}
+      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0 bg-card border-r border-border flex flex-col overflow-hidden shadow-sm"
+    >
+      {/* Logo */}
+      <div className="flex items-center h-14 px-4 border-b border-border shrink-0 bg-card/50">
+        <AnimatePresence mode="wait">
+          {!sidebarCollapsed ? (
+            <motion.div key="full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2.5">
+              <Image src="/MENTOR.svg" alt="Mentor" width={120} height={36} className="h-6 w-auto" />
+            </motion.div>
+          ) : (
+            <motion.div key="mini" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mx-auto">
+              <Image src="/MENTOR.svg" alt="AP" width={28} height={28} className="h-6 w-auto" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 custom-scrollbar">
+        {MODULES.map((mod) => {
+          const Icon = mod.icon;
+          const isActive = pathname.startsWith(mod.path);
+          return (
+            <Link key={mod.name} href={mod.path}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group relative ${
+                isActive ? 'bg-primary/10 text-primary font-semibold' : 'text-muted-foreground hover:text-foreground hover:bg-card-2 font-medium'
+              } ${sidebarCollapsed ? 'justify-center' : 'justify-start'}`}
+              title={sidebarCollapsed ? mod.name : undefined}
+            >
+              {isActive && (
+                <motion.div layoutId="sidebar-active" className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-primary rounded-r-full shadow-[0_0_8px_var(--primary)]" transition={{ type: 'spring', stiffness: 400, damping: 30 }} />
+              )}
+              <Icon className={`w-[18px] h-[18px] shrink-0 transition-transform duration-150 group-hover:scale-105 ${isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'}`} />
+              {!sidebarCollapsed && <span className="text-[13px] whitespace-nowrap">{mod.name}</span>}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* User */}
+      <div className={`p-3 border-t border-border shrink-0 bg-card/50 ${sidebarCollapsed ? 'flex justify-center' : ''}`}>
+        <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3 bg-background p-2.5 rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow'}`}>
+          <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs shrink-0">
+            {profile?.name?.[0]?.toUpperCase() || 'U'}
+          </div>
           {!sidebarCollapsed && (
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-teal rounded-xl flex items-center justify-center font-sora font-bold text-white text-xl shadow-lg border border-white/10">
-                AP
-              </div>
-              <span className="font-sora font-bold text-xl text-white tracking-wide">
-                Abhay Parth
-              </span>
+            <div className="overflow-hidden flex-1 min-w-0">
+              <p className="text-[13px] font-semibold text-foreground truncate">{profile?.exam || 'Exam'}</p>
+              <button onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); localStorage.removeItem('mentor_profile'); useStore.setState({ profile: null }); window.location.href = '/login'; }}
+                className="text-[11px] text-muted hover:text-destructive font-medium transition-colors cursor-pointer text-left">
+                Sign Out
+              </button>
             </div>
           )}
-          {sidebarCollapsed && (
-             <div className="w-8 h-8 mx-auto rounded-lg bg-gradient-to-br from-primary to-teal flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                G
-             </div>
-          )}
-        </div>
-
-        <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-2">
-          {MODULES.map((mod) => {
-            const Icon = mod.icon;
-            const isActive = pathname.startsWith(mod.path);
-            
-            return (
-              <Link
-                key={mod.name}
-                href={mod.path}
-                className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group ${
-                  isActive
-                    ? 'bg-card text-primary shadow-sm border border-border-hover'
-                    : 'text-muted hover:text-white hover:bg-card-2 border border-transparent'
-                } ${sidebarCollapsed ? 'justify-center' : 'justify-start'}`}
-                title={sidebarCollapsed ? mod.name : undefined}
-              >
-                <Icon className={`w-5 h-5 transition-transform group-hover:scale-110 ${isActive ? 'text-primary' : ''}`} />
-                {!sidebarCollapsed && (
-                  <span className="font-medium text-[15px]">{mod.name}</span>
-                )}
-                
-                {/* Active Indicator Line */}
-                {isActive && !sidebarCollapsed && (
-                  <div className="ml-auto w-1 h-5 rounded-full bg-primary" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className={`p-4 border-t border-border mt-auto ${sidebarCollapsed ? 'flex justify-center' : ''}`}>
-           <div className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3 bg-card p-3 rounded-xl border border-border'} group`}>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-bold shrink-0">
-                AP
-              </div>
-              {!sidebarCollapsed && (
-                <div className="overflow-hidden flex-1">
-                  <p className="text-sm font-semibold text-white truncate">Target {profile?.exam || 'Exam'}</p>
-                  <button 
-                    onClick={async () => {
-                      await fetch('/api/auth/logout', { method: 'POST' });
-                      localStorage.removeItem('abhaypath_profile');
-                      useStore.setState({ profile: null });
-                      window.location.href = '/login';
-                    }}
-                    className="text-xs text-red-400 mt-0.5 hover:text-red-300 font-medium transition-colors cursor-pointer text-left"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              )}
-           </div>
         </div>
       </div>
-    </>
+    </motion.div>
   );
 }

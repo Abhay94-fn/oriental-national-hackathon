@@ -8,35 +8,40 @@ export function TopBar() {
 
   const getTitle = () => {
     switch(true) {
-        case currentModule.startsWith('/dashboard'): return 'Command Center';
-        case currentModule.startsWith('/retention'): return 'Retention Engine';
-        case currentModule.startsWith('/planner'): return 'Study Planner';
-        case currentModule.startsWith('/practice'): return 'Adaptive Practice';
+        case currentModule.startsWith('/dashboard'): return 'Dashboard';
+        case currentModule.startsWith('/retention'): return 'Retention';
+        case currentModule.startsWith('/planner'): return 'Planner';
+        case currentModule.startsWith('/practice'): return 'Practice';
         case currentModule.startsWith('/tutor'): return 'AI Tutor';
         case currentModule.startsWith('/lab'): return 'Content Lab';
-        default: return 'Abhay Parth';
+        case currentModule.startsWith('/recommendations'): return 'Recommendations';
+        case currentModule.startsWith('/learning-path'): return 'Learning Path';
+        case currentModule.startsWith('/notes'): return 'Study Notes';
+        case currentModule.startsWith('/evaluate'): return 'Assignment Eval';
+        case currentModule.startsWith('/archive'): return 'Archive';
+        default: return 'Mentor';
     }
   };
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 border-b border-border bg-surface/50 backdrop-blur-md sticky top-0 z-40">
-      <div className="flex items-center gap-4">
-        <button 
+    <header className="h-14 flex items-center justify-between px-6 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-40">
+      <div className="flex items-center gap-3">
+        <button
           onClick={toggleSidebar}
-          className="p-2 -ml-2 rounded-lg text-muted hover:text-white hover:bg-card-2 transition-colors md:hidden"
+          className="p-1.5 -ml-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card-2 transition-colors md:inline-flex"
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="w-4 h-4" />
         </button>
-        <h1 className="font-sora text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+        <h1 className="text-sm font-bold text-foreground tracking-tight">
           {getTitle()}
         </h1>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {profile && (
-          <div className="flex items-center gap-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 px-3 py-1.5 rounded-full">
-            <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
-            <span className="text-sm font-semibold text-orange-500">{profile.streak} Day Streak</span>
+          <div className="flex items-center gap-1.5 bg-card border border-border px-3 py-1.5 rounded-lg shadow-sm">
+            <Flame className="w-3.5 h-3.5 text-primary" />
+            <span className="text-[12px] font-semibold text-muted-foreground">{profile.streak} day streak</span>
           </div>
         )}
       </div>

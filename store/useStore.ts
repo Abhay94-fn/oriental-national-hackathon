@@ -29,6 +29,19 @@ interface AppState {
   // Actions
   fetchConcepts: () => Promise<void>;
   fetchAnalytics: () => Promise<void>;
+
+  // Voice Tutor State
+  voice: {
+    isListening: boolean;
+    isSpeaking: boolean;
+    isThinking: boolean;
+    transcript: string;
+    feedback: string;
+    autoSpeak: boolean;
+    narrator: 'female' | 'male' | 'neutral';
+  };
+  setVoiceState: (updates: Partial<AppState['voice']>) => void;
+  resetVoice: () => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -76,5 +89,27 @@ export const useStore = create<AppState>((set) => ({
     } catch (e) {
       console.error('Failed to fetch analytics', e);
     }
-  }
+  },
+
+  voice: {
+    isListening: false,
+    isSpeaking: false,
+    isThinking: false,
+    transcript: '',
+    feedback: '',
+    autoSpeak: true,
+    narrator: 'female'
+  },
+  setVoiceState: (updates) => set((state) => ({ voice: { ...state.voice, ...updates } })),
+  resetVoice: () => set((state) => ({
+    voice: {
+      isListening: false,
+      isSpeaking: false,
+      isThinking: false,
+      transcript: '',
+      feedback: '',
+      autoSpeak: state.voice.autoSpeak,
+      narrator: state.voice.narrator
+    }
+  }))
 }));

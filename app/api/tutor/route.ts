@@ -1,34 +1,65 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { stream } from '../../../lib/claude';
+import db from '../../../lib/db';
+import { cookies } from 'next/headers';
+import { verifySessionToken } from '../../../lib/auth';
 
 export const runtime = 'nodejs'; // Required for better-sqlite3 but we dont use it here except maybe logging later
 
 export async function POST(request: Request) {
   try {
-    const { messages, subject, language, exam } = await request.json();
+    const cookieStore = cookies();
+    const token = cookieStore.get('abhay_session')?.value;
+    const session = token ? verifySessionToken(token) : null;
+    const userId = session?.userId || 'anonymous';
 
+    const { messages, subject, language, exam, sessionId, mode } = await request.json();
+
+    const currentSessionId = sessionId || crypto.randomUUID();
     const targetExam = exam || 'Indian competitive exams';
-    const SYSTEM_PROMPT = `You are a helpful, conversational AI Tutor for ${targetExam} aspirants, behaving exactly like ChatGPT.
-Your knowledge base includes standard textbooks and PyQs for ${targetExam}.
+    const isMentorMode = mode === 'mentor';
 
+    const SYSTEM_PROMPT = isMentorMode ?
+`You are an AI Mentor for ${targetExam} aspirants.
+Current Topic: ${subject}
+Language: ${language || 'English'}
+
+STRICT CONSTRAINTS (MENTOR MODE):
+1. Respond in clear ${language || 'English'} only. For Hinglish, mix naturally.
+2. Give a concise explanation first, then ask at most ONE guiding question.
+3. Do not start with fluff (no "I appreciate..." or long corrections).
+4. Do not use markdown headers, separators, or decorative blocks.
+5. Keep each reply practical and short (around 80-140 words).
+6. If a question is outside exam syllabus, answer briefly without scolding, then add one line on exam relevance.` :
+`You are a helpful AI Tutor for ${targetExam} aspirants.
 Current Topic: ${subject}
 Language: ${language || 'English'}
 
 STRICT CONSTRAINTS:
-1. ALWAYS respond entirely in clear, conversational ${language || 'English'}. If the language is 'Hinglish', mix English technical terms with Hindi safely.
-2. DO NOT over-use formatting. Write naturally like a human tutor speaking.
-3. Prioritize concise, actionable answers. Keep responses short and directly to the point.
-4. Give a single, cohesive explanation without heavy bullet-point lists or excessive "Exam Tips" blocks unless strictly necessary.`;
+1. Respond in clear ${language || 'English'} only. For Hinglish, mix naturally.
+2. Give direct, concise answers first; avoid long meta commentary.
+3. Do not use markdown headers, separators, or decorative blocks.
+4. Keep responses practical, cohesive, and short (around 80-140 words).
+5. If a question is outside exam syllabus, still answer briefly and respectfully, then add one short line on relevance.`;
+
+    const userMessage = messages[messages.length - 1];
+    if (userMessage.role === 'user') {
+       db.prepare(`INSERT INTO conversations (user_id, session_id, role, content, subject) VALUES (?, ?, ?, ?, ?)`).run(userId, currentSessionId, 'user', userMessage.content, subject || 'General');
+    }
 
     const readable = new ReadableStream({
       async start(controller) {
         const encoder = new TextEncoder();
+        let fullResponse = '';
         try {
           await stream(messages, SYSTEM_PROMPT, (text) => {
+            fullResponse += text;
             controller.enqueue(encoder.encode(text));
           });
           controller.close();
+          // Save assistant message after stream finishes
+          db.prepare(`INSERT INTO conversations (user_id, session_id, role, content, subject) VALUES (?, ?, ?, ?, ?)`).run(userId, currentSessionId, 'assistant', fullResponse, subject || 'General');
         } catch (e) {
           controller.error(e);
         }
@@ -39,7 +70,8 @@ STRICT CONSTRAINTS:
       headers: {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive'
+        'Connection': 'keep-alive',
+        'X-Session-Id': currentSessionId
       }
     });
 

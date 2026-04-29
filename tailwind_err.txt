@@ -1,0 +1,294 @@
+
+Rebuilding...
+
+[1m[33mwarn[39m[22m - The class `ease-[cubic-bezier(0.16,1,0.3,1)]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `ease-&lsqb;cubic-bezier(0.16,1,0.3,1)&rsqb;` to silence this warning.
+CssSyntaxError: tailwindcss: C:\Users\aakas\Downloads\oriental\app\globals.css:1:1: The `text-foreground` class does not exist. If `text-foreground` is a custom class, make sure it is defined within a `@layer` directive.
+    at Input.error (C:\Users\aakas\Downloads\oriental\node_modules\postcss\lib\input.js:135:16)
+    at AtRule.error (C:\Users\aakas\Downloads\oriental\node_modules\postcss\lib\node.js:146:32)
+    at processApply (C:\Users\aakas\Downloads\oriental\node_modules\tailwindcss\lib\lib\expandApplyAtRules.js:380:29)
+    at C:\Users\aakas\Downloads\oriental\node_modules\tailwindcss\lib\lib\expandApplyAtRules.js:551:9
+    at C:\Users\aakas\Downloads\oriental\node_modules\tailwindcss\lib\processTailwindFeatures.js:55:50
+    at async Object.Once (C:\Users\aakas\Downloads\oriental\node_modules\tailwindcss\lib\cli\build\plugin.js:248:17)
+    at async LazyResult.runAsync (C:\Users\aakas\Downloads\oriental\node_modules\postcss\lib\lazy-result.js:293:11)
+    at async build (C:\Users\aakas\Downloads\oriental\node_modules\tailwindcss\lib\cli\build\index.js:49:9) {
+  reason: 'The `text-foreground` class does not exist. If `text-foreground` is a custom class, make sure it is defined within a `@layer` directive.',
+  file: 'C:\\Users\\aakas\\Downloads\\oriental\\app\\globals.css',
+  source: '@tailwind base;\n' +
+    '@tailwind components;\n' +
+    '@tailwind utilities;\n' +
+    '\n' +
+    '@layer base {\n' +
+    '  :root {\n' +
+    '    --bg: #060c17;\n' +
+    '    --surface: #0d1929;\n' +
+    '    --card: #0f2040;\n' +
+    '    --card-foreground: #ffffff;\n' +
+    '    --card-2: #112448;\n' +
+    '    --border: #1a3256;\n' +
+    '    --border-hover: #2a4c7a;\n' +
+    '    --primary: #f0a500;       \n' +
+    '    --primary-foreground: #ffffff;\n' +
+    '    --primary-dim: rgba(240, 165, 0, 0.12);\n' +
+    '    --teal: #00d4b4;          \n' +
+    '    --teal-dim: rgba(0, 212, 180, 0.10);\n' +
+    '    --violet: #a78bfa;        \n' +
+    '    --violet-dim: rgba(167, 139, 250, 0.10);\n' +
+    '    --red: #f87171;           \n' +
+    '    --red-dim: rgba(248, 113, 113, 0.10);\n' +
+    '    --green: #34d399;         \n' +
+    '    --green-dim: rgba(52, 211, 153, 0.10);\n' +
+    '    --text: #ccd6f6;\n' +
+    '    --muted: #6a82a0;\n' +
+    '    --muted-foreground: #8a9fc0;\n' +
+    '    --background: #060c17;\n' +
+    '    --foreground: #ccd6f6;\n' +
+    '    --ring: #f0a500;\n' +
+    '  }\n' +
+    '\n' +
+    '  .dark {\n' +
+    '    --bg: #060c17;\n' +
+    '    --surface: #0d1929;\n' +
+    '    --card: #0f2040;\n' +
+    '    --card-foreground: #ffffff;\n' +
+    '    --border: #1a3256;\n' +
+    '    --primary: #f0a500;\n' +
+    '    --primary-foreground: #ffffff;\n' +
+    '    --muted: #6a82a0;\n' +
+    '    --muted-foreground: #8a9fc0;\n' +
+    '    --background: #060c17;\n' +
+    '    --foreground: #ccd6f6;\n' +
+    '    --ring: #f0a500;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '@layer base {\n' +
+    '  * {\n' +
+    '    border-color: var(--border);\n' +
+    '    outline-color: var(--ring);\n' +
+    '  }\n' +
+    '  body {\n' +
+    '    @apply bg-background text-foreground;\n' +
+    '    font-family: var(--font-dm-sans), sans-serif;\n' +
+    '  }\n' +
+    '  h1, h2, h3, h4, h5, h6 {\n' +
+    '    font-family: var(--font-sora), sans-serif;\n' +
+    '    font-weight: 600;\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '@layer utilities {\n' +
+    '  .animate-caret-blink {\n' +
+    '    animation: caret-blink 1.2s ease-out infinite;\n' +
+    '  }\n' +
+    '  .border-border {\n' +
+    '    border-color: var(--border);\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '@keyframes caret-blink {\n' +
+    '  0%, 70%, 100% { opacity: 1; }\n' +
+    '  20%, 50% { opacity: 0; }\n' +
+    '}\n' +
+    '\n' +
+    '::-webkit-scrollbar {\n' +
+    '  width: 8px;\n' +
+    '  height: 8px;\n' +
+    '}\n' +
+    '::-webkit-scrollbar-track {\n' +
+    '  background: var(--surface); \n' +
+    '}\n' +
+    '::-webkit-scrollbar-thumb {\n' +
+    '  background: var(--card-2); \n' +
+    '  border-radius: 4px;\n' +
+    '}\n' +
+    '::-webkit-scrollbar-thumb:hover {\n' +
+    '  background: var(--border-hover); \n' +
+    '}\n' +
+    '\n' +
+    '.prose {\n' +
+    '  color: var(--text);\n' +
+    '}\n' +
+    '.prose h1, .prose h2, .prose h3 {\n' +
+    '  color: var(--text);\n' +
+    '  margin-top: 1.5em;\n' +
+    '  margin-bottom: 0.5em;\n' +
+    '}\n' +
+    '.prose p {\n' +
+    '  margin-bottom: 1em;\n' +
+    '}\n' +
+    '.prose ul {\n' +
+    '  list-style-type: disc;\n' +
+    '  padding-left: 1.5em;\n' +
+    '  margin-bottom: 1em;\n' +
+    '}\n' +
+    '.prose ol {\n' +
+    '  list-style-type: decimal;\n' +
+    '  padding-left: 1.5em;\n' +
+    '  margin-bottom: 1em;\n' +
+    '}\n' +
+    '.prose strong {\n' +
+    '  color: #fff;\n' +
+    '}\n' +
+    '.prose pre {\n' +
+    '  background-color: var(--card);\n' +
+    '  padding: 1rem;\n' +
+    '  border-radius: 0.5rem;\n' +
+    '  overflow-x: auto;\n' +
+    '  margin-bottom: 1em;\n' +
+    '  border: 1px solid var(--border);\n' +
+    '}\n' +
+    '.prose code {\n' +
+    '  font-family: var(--font-jetbrains-mono), monospace;\n' +
+    '  background-color: var(--card);\n' +
+    '  padding: 0.2em 0.4em;\n' +
+    '  border-radius: 0.25rem;\n' +
+    '  font-size: 0.875em;\n' +
+    '}\n',
+  line: 1,
+  column: 1,
+  endLine: 1,
+  endColumn: 16,
+  input: {
+    column: 1,
+    endColumn: 16,
+    endLine: 1,
+    endOffset: 15,
+    line: 1,
+    offset: 0,
+    source: '@tailwind base;\n' +
+      '@tailwind components;\n' +
+      '@tailwind utilities;\n' +
+      '\n' +
+      '@layer base {\n' +
+      '  :root {\n' +
+      '    --bg: #060c17;\n' +
+      '    --surface: #0d1929;\n' +
+      '    --card: #0f2040;\n' +
+      '    --card-foreground: #ffffff;\n' +
+      '    --card-2: #112448;\n' +
+      '    --border: #1a3256;\n' +
+      '    --border-hover: #2a4c7a;\n' +
+      '    --primary: #f0a500;       \n' +
+      '    --primary-foreground: #ffffff;\n' +
+      '    --primary-dim: rgba(240, 165, 0, 0.12);\n' +
+      '    --teal: #00d4b4;          \n' +
+      '    --teal-dim: rgba(0, 212, 180, 0.10);\n' +
+      '    --violet: #a78bfa;        \n' +
+      '    --violet-dim: rgba(167, 139, 250, 0.10);\n' +
+      '    --red: #f87171;           \n' +
+      '    --red-dim: rgba(248, 113, 113, 0.10);\n' +
+      '    --green: #34d399;         \n' +
+      '    --green-dim: rgba(52, 211, 153, 0.10);\n' +
+      '    --text: #ccd6f6;\n' +
+      '    --muted: #6a82a0;\n' +
+      '    --muted-foreground: #8a9fc0;\n' +
+      '    --background: #060c17;\n' +
+      '    --foreground: #ccd6f6;\n' +
+      '    --ring: #f0a500;\n' +
+      '  }\n' +
+      '\n' +
+      '  .dark {\n' +
+      '    --bg: #060c17;\n' +
+      '    --surface: #0d1929;\n' +
+      '    --card: #0f2040;\n' +
+      '    --card-foreground: #ffffff;\n' +
+      '    --border: #1a3256;\n' +
+      '    --primary: #f0a500;\n' +
+      '    --primary-foreground: #ffffff;\n' +
+      '    --muted: #6a82a0;\n' +
+      '    --muted-foreground: #8a9fc0;\n' +
+      '    --background: #060c17;\n' +
+      '    --foreground: #ccd6f6;\n' +
+      '    --ring: #f0a500;\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      '@layer base {\n' +
+      '  * {\n' +
+      '    border-color: var(--border);\n' +
+      '    outline-color: var(--ring);\n' +
+      '  }\n' +
+      '  body {\n' +
+      '    @apply bg-background text-foreground;\n' +
+      '    font-family: var(--font-dm-sans), sans-serif;\n' +
+      '  }\n' +
+      '  h1, h2, h3, h4, h5, h6 {\n' +
+      '    font-family: var(--font-sora), sans-serif;\n' +
+      '    font-weight: 600;\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      '@layer utilities {\n' +
+      '  .animate-caret-blink {\n' +
+      '    animation: caret-blink 1.2s ease-out infinite;\n' +
+      '  }\n' +
+      '  .border-border {\n' +
+      '    border-color: var(--border);\n' +
+      '  }\n' +
+      '}\n' +
+      '\n' +
+      '@keyframes caret-blink {\n' +
+      '  0%, 70%, 100% { opacity: 1; }\n' +
+      '  20%, 50% { opacity: 0; }\n' +
+      '}\n' +
+      '\n' +
+      '::-webkit-scrollbar {\n' +
+      '  width: 8px;\n' +
+      '  height: 8px;\n' +
+      '}\n' +
+      '::-webkit-scrollbar-track {\n' +
+      '  background: var(--surface); \n' +
+      '}\n' +
+      '::-webkit-scrollbar-thumb {\n' +
+      '  background: var(--card-2); \n' +
+      '  border-radius: 4px;\n' +
+      '}\n' +
+      '::-webkit-scrollbar-thumb:hover {\n' +
+      '  background: var(--border-hover); \n' +
+      '}\n' +
+      '\n' +
+      '.prose {\n' +
+      '  color: var(--text);\n' +
+      '}\n' +
+      '.prose h1, .prose h2, .prose h3 {\n' +
+      '  color: var(--text);\n' +
+      '  margin-top: 1.5em;\n' +
+      '  margin-bottom: 0.5em;\n' +
+      '}\n' +
+      '.prose p {\n' +
+      '  margin-bottom: 1em;\n' +
+      '}\n' +
+      '.prose ul {\n' +
+      '  list-style-type: disc;\n' +
+      '  padding-left: 1.5em;\n' +
+      '  margin-bottom: 1em;\n' +
+      '}\n' +
+      '.prose ol {\n' +
+      '  list-style-type: decimal;\n' +
+      '  padding-left: 1.5em;\n' +
+      '  margin-bottom: 1em;\n' +
+      '}\n' +
+      '.prose strong {\n' +
+      '  color: #fff;\n' +
+      '}\n' +
+      '.prose pre {\n' +
+      '  background-color: var(--card);\n' +
+      '  padding: 1rem;\n' +
+      '  border-radius: 0.5rem;\n' +
+      '  overflow-x: auto;\n' +
+      '  margin-bottom: 1em;\n' +
+      '  border: 1px solid var(--border);\n' +
+      '}\n' +
+      '.prose code {\n' +
+      '  font-family: var(--font-jetbrains-mono), monospace;\n' +
+      '  background-color: var(--card);\n' +
+      '  padding: 0.2em 0.4em;\n' +
+      '  border-radius: 0.25rem;\n' +
+      '  font-size: 0.875em;\n' +
+      '}\n',
+    url: 'file:///C:/Users/aakas/Downloads/oriental/app/globals.css',
+    file: 'C:\\Users\\aakas\\Downloads\\oriental\\app\\globals.css'
+  },
+  plugin: 'tailwindcss'
+}

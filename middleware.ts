@@ -11,15 +11,16 @@ export function middleware(request: NextRequest) {
   }
 
   const isAuthPage = path === '/login' || path === '/register';
+  const isPublicPage = path === '/';
 
-  // If user is NOT logged in and tries to access ANY page (Dashboard, etc.)
-  if (!session && !isAuthPage) {
+  // If user is NOT logged in and tries to access ANY page (Dashboard, etc.) other than public/auth
+  if (!session && !isAuthPage && !isPublicPage) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
   // If user IS logged in and tries to access login/register
   if (session && isAuthPage) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   return NextResponse.next();

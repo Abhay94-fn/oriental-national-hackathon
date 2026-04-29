@@ -1,7 +1,7 @@
 // Switching to OpenAI-compatible fetch to support KodeKloud proxy
-const API_KEY = process.env.ANTHROPIC_API_KEY || 'sk-9ai0aN6r3_we4yxUKhdXSw';
+const API_KEY = process.env.ANTHROPIC_API_KEY || 'sk-9-GlN_uS0ogQ5MooJwkOew';
 const BASE_URL = 'https://api.ai.kodekloud.com/v1/chat/completions';
-export const MODEL = 'google/gemini-3-flash-preview';
+export const MODEL = 'claude-sonnet-4-6';
 
 export async function complete(
   messages: { role: 'user' | 'assistant'; content: string }[],

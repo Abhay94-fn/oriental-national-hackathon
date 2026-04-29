@@ -142,3 +142,40 @@ export interface Analytics {
   weeklyActivity: DayActivity[];
   forgettingCurveData: CurvePoint[];
 }
+
+export interface Recommendation {
+  id: string;
+  title: string;
+  description: string;
+  type: 'Course' | 'Project' | 'Tutorial' | 'Video';
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  link?: string;
+  reason: string;
+}
+
+export interface PathMilestone {
+  title: string;
+  description: string;
+  estimatedHours: number;
+  resources: string[];
+}
+
+export interface LearningPhase {
+  phaseName: string;
+  description: string;
+  milestones: PathMilestone[];
+}
+
+export interface LearningPath {
+  targetExam: string;
+  currentLevel: string;
+  totalEstimatedHours: number;
+  phases: LearningPhase[];
+}
+
+export interface EvaluationResult {
+  score: number;
+  feedback: string;
+  improvements: string[];
+  modelAnswer: string;
+}

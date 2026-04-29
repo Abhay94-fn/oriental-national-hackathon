@@ -15,9 +15,40 @@ export function OnboardingModal() {
   const [hours, setHours] = useState('6');
 
   useEffect(() => {
-    const localProfile = localStorage.getItem('abhaypath_profile');
+    const localProfile = localStorage.getItem('mentor_profile');
     if (localProfile) {
-      setProfile(JSON.parse(localProfile));
+      const parsedProfile = JSON.parse(localProfile);
+      
+      // Calculate real-time streak
+      const now = new Date();
+      const lastActiveDate = new Date(parsedProfile.lastActive);
+      
+      // Reset time to midnight for comparison
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const lastActive = new Date(lastActiveDate.getFullYear(), lastActiveDate.getMonth(), lastActiveDate.getDate());
+      
+      const diffTime = Math.abs(today.getTime() - lastActive.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      
+      let newStreak = parsedProfile.streak || 0;
+      
+      if (diffDays === 1) {
+        // Logged in consecutive day
+        newStreak += 1;
+      } else if (diffDays > 1) {
+        // Missed a day
+        newStreak = 0; // or 1 if you consider current day as start
+      }
+      // if diffDays === 0, same day, streak unchanged
+      
+      const updatedProfile = {
+        ...parsedProfile,
+        streak: newStreak,
+        lastActive: now.toISOString()
+      };
+      
+      localStorage.setItem('mentor_profile', JSON.stringify(updatedProfile));
+      setProfile(updatedProfile);
     } else {
       setIsOpen(true);
     }
@@ -37,7 +68,7 @@ export function OnboardingModal() {
       streak: 0,
       lastActive: new Date().toISOString()
     };
-    localStorage.setItem('abhaypath_profile', JSON.stringify(newProfile));
+    localStorage.setItem('mentor_profile', JSON.stringify(newProfile));
     setProfile(newProfile);
     setIsOpen(false);
   };
@@ -46,65 +77,65 @@ export function OnboardingModal() {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-sm p-4">
         <motion.div 
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="bg-card w-full max-w-md rounded-2xl border border-border overflow-hidden shadow-2xl"
+          className="bg-white w-full max-w-md rounded-2xl border border-black/[0.06] overflow-hidden shadow-2xl"
         >
-          <div className="bg-gradient-to-br from-primary/20 to-teal/20 p-6 flex flex-col items-center text-center border-b border-border">
-            <div className="w-16 h-16 bg-gradient-to-br from-primary to-teal rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+          <div className="bg-black/[0.02] p-6 flex flex-col items-center text-center border-b border-black/[0.06]">
+            <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-4 shadow-lg">
               <Rocket className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-2xl font-sora font-bold text-white mb-2">Welcome to Abhay Parth</h2>
-            <p className="text-sm text-muted">Let's configure your study engine to maximize retention.</p>
+            <h2 className="text-2xl font-bold text-black tracking-tight mb-2">Welcome to Mentor</h2>
+            <p className="text-sm text-black/60">Let's configure your study engine to maximize retention.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-muted mb-1.5">Your Name</label>
+              <label className="block text-sm font-medium text-black/60 mb-1.5">Your Name</label>
               <input 
                 type="text" 
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="What should we call you?"
-                className="w-full bg-surface border border-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                className="w-full bg-black/[0.02] border border-black/[0.08] rounded-xl px-4 py-2.5 text-black placeholder:text-black/20 focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition-all text-sm"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-muted mb-1.5">Target Exam</label>
+              <label className="block text-sm font-medium text-black/60 mb-1.5">Target Exam</label>
               <input 
                 type="text" 
                 value={exam}
                 onChange={e => setExam(e.target.value)}
                 placeholder="e.g. UPSC, GATE, CAT, SSC CGL"
-                className="w-full bg-surface border border-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                className="w-full bg-black/[0.02] border border-black/[0.08] rounded-xl px-4 py-2.5 text-black placeholder:text-black/20 focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition-all text-sm"
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-muted mb-1.5">Exam Date</label>
+                  <label className="block text-sm font-medium text-black/60 mb-1.5">Exam Date</label>
                   <input 
                     type="date" 
                     value={examDate}
                     onChange={e => setExamDate(e.target.value)}
-                    className="w-full bg-surface border border-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    className="w-full bg-black/[0.02] border border-black/[0.08] rounded-xl px-4 py-2.5 text-black focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition-all text-sm"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-muted mb-1.5">Study Hrs / Day</label>
+                  <label className="block text-sm font-medium text-black/60 mb-1.5">Study Hrs / Day</label>
                   <input 
                     type="number" 
                     min="1" max="16"
                     value={hours}
                     onChange={e => setHours(e.target.value)}
-                    className="w-full bg-surface border border-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
+                    className="w-full bg-black/[0.02] border border-black/[0.08] rounded-xl px-4 py-2.5 text-black focus:outline-none focus:border-black/20 focus:ring-1 focus:ring-black/20 transition-all text-sm"
                     required
                   />
                 </div>
@@ -112,7 +143,7 @@ export function OnboardingModal() {
 
             <button
               type="submit"
-              className="w-full mt-6 bg-gradient-to-r from-primary to-amber-400 text-black font-bold text-sm py-3 rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+              className="w-full mt-6 bg-primary text-primary-foreground font-semibold text-sm py-3.5 rounded-xl hover:opacity-90 transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
             >
               Initialize Engine
               <Rocket className="w-4 h-4" />
