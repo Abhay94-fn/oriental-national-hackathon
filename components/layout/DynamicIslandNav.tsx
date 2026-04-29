@@ -39,7 +39,7 @@ export function DynamicIslandNav() {
       >
         <div className="h-14 flex items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Image src="/MENTOR.svg" alt="Mentor" width={120} height={36} className="h-6 w-auto" priority />
+            <Image src="/Mentor.png" alt="Mentor" width={120} height={36} className="h-6 w-auto" priority />
           </Link>
 
           {/* Desktop Links (Hidden when shrunk, unless hovered) */}

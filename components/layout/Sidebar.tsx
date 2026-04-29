@@ -39,11 +39,11 @@ export function Sidebar() {
         <AnimatePresence mode="wait">
           {!sidebarCollapsed ? (
             <motion.div key="full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2.5">
-              <Image src="/MENTOR.svg" alt="Mentor" width={120} height={36} className="h-6 w-auto" />
+              <Image src="/Mentor.png" alt="Mentor" width={120} height={36} className="h-6 w-auto" />
             </motion.div>
           ) : (
             <motion.div key="mini" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mx-auto">
-              <Image src="/MENTOR.svg" alt="AP" width={28} height={28} className="h-6 w-auto" />
+              <Image src="/Mentor.png" alt="Mentor" width={28} height={28} className="h-6 w-auto" />
             </motion.div>
           )}
         </AnimatePresence>

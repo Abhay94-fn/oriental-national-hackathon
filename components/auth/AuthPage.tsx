@@ -77,7 +77,7 @@ function VisualSide({ view }: { view: 'login' | 'register' }) {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex items-center justify-center gap-3 mb-6"
           >
-            <Image src="/MENTOR.svg" alt="Mentor" width={160} height={48} className="h-12 w-auto drop-shadow-md" />
+            <Image src="/Mentor.png" alt="Mentor" width={160} height={48} className="h-12 w-auto drop-shadow-md" />
           </motion.div>
 
           <motion.h2
@@ -268,7 +268,7 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
           >
             {/* Mobile logo */}
             <motion.div variants={itemVariants} className="md:hidden flex items-center justify-center mb-10">
-              <Image src="/MENTOR.svg" alt="Mentor" width={140} height={42} className="h-9 w-auto" />
+              <Image src="/Mentor.png" alt="Mentor" width={140} height={42} className="h-9 w-auto" />
             </motion.div>
 
             {/* Header */}

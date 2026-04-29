@@ -256,7 +256,7 @@ export default function LandingPage() {
         <footer className="border-t border-border bg-card/50 py-12">
           <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
-              <Image src="/MENTOR.svg" alt="Mentor" width={100} height={30} className="h-6 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
+              <Image src="/Mentor.png" alt="Mentor" width={100} height={30} className="h-6 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
             </div>
             <div className="flex items-center gap-8 text-sm font-semibold text-muted-foreground">
               <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>

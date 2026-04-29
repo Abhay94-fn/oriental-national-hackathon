@@ -74,7 +74,7 @@ export function SplashScreen() {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                   className="mt-2 text-muted-foreground font-bold text-lg tracking-widest uppercase relative z-20"
                 >
-                  Guidance when you need it most.
+                  Guidance when you need it most
                 </motion.div>
               )}
             </AnimatePresence>
