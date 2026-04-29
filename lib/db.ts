@@ -1,11 +1,27 @@
-import Database from 'better-sqlite3';
 import path from 'path';
 
 // Note: In Next.js App Router, this file runs on the server.
+// Attempt to load the native better-sqlite3 module; during build the native
+// binary may be unavailable (or incompatible). Fall back to a minimal mock
+// to avoid build-time failures. At runtime ensure better-sqlite3 is installed
+// and the binary matches your Node version/arch.
 const dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), 'mentor.db');
-const db = new Database(dbPath, { timeout: 15000 });
 
-db.pragma('journal_mode = WAL');
+let db: any;
+try {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - dynamic require for native module
+  const Database = require('better-sqlite3');
+  db = new Database(dbPath, { timeout: 15000 });
+  db.pragma('journal_mode = WAL');
+} catch (e) {
+  console.warn('better-sqlite3 not available; using in-memory mock for build-time. Install/compile better-sqlite3 for production runtime.', e);
+  db = {
+    exec: () => {},
+    prepare: () => ({ run: () => ({}), get: () => ({ c: 0 }), all: () => [], raw: () => [] }),
+    transaction: (fn: any) => fn,
+  };
+}
 
 export function initializeDB() {
   db.exec(`

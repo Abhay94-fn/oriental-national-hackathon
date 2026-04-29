@@ -61,7 +61,7 @@ export function SplashScreen() {
           <div className="relative flex flex-col items-center justify-center p-8">
             <DiaTextReveal
               className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground relative z-20"
-              text="Abhay Parth"
+              text="Mentor"
               colors={["#22d3ee", "#818cf8", "#f472b6", "#34d399"]}
             />
 
@@ -74,7 +74,7 @@ export function SplashScreen() {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                   className="mt-2 text-muted-foreground font-bold text-lg tracking-widest uppercase relative z-20"
                 >
-                  The AI Mentor You Deserve
+                  Guidance when you need it most.
                 </motion.div>
               )}
             </AnimatePresence>
