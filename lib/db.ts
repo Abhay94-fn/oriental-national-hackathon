@@ -160,6 +160,33 @@ export function initializeDB() {
       report_markdown TEXT NOT NULL,
       created_at TEXT DEFAULT (datetime('now'))
     );
+
+    CREATE TABLE IF NOT EXISTS embeddings (
+      id TEXT PRIMARY KEY,
+      namespace TEXT,
+      source_id TEXT,
+      text TEXT,
+      vector TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS kg_nodes (
+      id TEXT PRIMARY KEY,
+      namespace TEXT,
+      label TEXT NOT NULL,
+      metadata TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS kg_edges (
+      id TEXT PRIMARY KEY,
+      namespace TEXT,
+      source_node TEXT NOT NULL,
+      target_node TEXT NOT NULL,
+      relation TEXT,
+      metadata TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
   `);
 
   // Migrate existing tables to add user_id
