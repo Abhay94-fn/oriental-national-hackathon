@@ -74,11 +74,31 @@ export function PathTimeline({ path }: Props) {
                       
                       {milestone.resources.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
-                          {milestone.resources.map((res, rIdx) => (
-                            <span key={rIdx} className="text-xs text-primary/80 bg-primary/10 px-2 py-1 rounded border border-primary/20 flex items-center gap-1">
-                              <MapPin className="w-3 h-3" /> {res}
-                            </span>
-                          ))}
+                          {milestone.resources.map((res: any, rIdx) => {
+                            const isString = typeof res === 'string';
+                            const title = isString ? res : res.title;
+                            const link = isString ? undefined : res.link;
+                            
+                            if (link) {
+                              return (
+                                <a 
+                                  key={rIdx} 
+                                  href={link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-xs text-primary/80 bg-primary/10 px-2 py-1 rounded border border-primary/20 flex items-center gap-1 hover:bg-primary/20 hover:text-primary transition-colors"
+                                >
+                                  <MapPin className="w-3 h-3" /> {title}
+                                </a>
+                              );
+                            }
+                            
+                            return (
+                              <span key={rIdx} className="text-xs text-primary/80 bg-primary/10 px-2 py-1 rounded border border-primary/20 flex items-center gap-1">
+                                <MapPin className="w-3 h-3" /> {title}
+                              </span>
+                            );
+                          })}
                         </div>
                       )}
                     </div>

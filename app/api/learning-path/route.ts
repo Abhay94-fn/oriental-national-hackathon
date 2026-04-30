@@ -38,7 +38,10 @@ Example JSON output format:
           "title": "Mastering Basic Algebra",
           "description": "Focus on linear equations and polynomials.",
           "estimatedHours": 10,
-          "resources": ["NCERT Chapter 2", "Khan Academy Algebra Basics"]
+          "resources": [
+            { "title": "NCERT Chapter 2", "link": "https://ncert.nic.in/textbook.php" },
+            { "title": "Khan Academy Algebra Basics", "link": "https://www.khanacademy.org/math/algebra-basics" }
+          ]
         }
       ]
     }
@@ -46,7 +49,12 @@ Example JSON output format:
 }
 `;
 
-    const prompt = `Generate a comprehensive learning path. Ensure the total hours are realistic and milestones are actionable.`;
+    const prompt = `Generate a comprehensive learning path. Ensure the total hours are realistic and milestones are actionable.
+CRITICAL INSTRUCTION: For every resource link, you MUST use YouTube SEARCH links in this exact format:
+https://www.youtube.com/results?search_query=TOPIC+KEYWORD+tutorial
+Example: { "title": "Kinematics Video Tutorial", "link": "https://www.youtube.com/results?search_query=kinematics+JEE+tutorial" }
+Also include at least one official reference per milestone (NCERT, Khan Academy, etc.) with real URLs.
+NEVER generate direct YouTube watch/playlist URLs — they will be broken. Use SEARCH URLs only.`;
 
     const learningPath = await completeJSON<LearningPath>(prompt, SYSTEM_PROMPT);
 

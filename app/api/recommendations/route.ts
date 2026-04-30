@@ -10,6 +10,7 @@ export async function POST(request: Request) {
     const SYSTEM_PROMPT = `You are an expert AI Education Counselor.
 Your task is to recommend study resources based on a student's profile.
 Generate a structured list of recommendations including courses, projects, tutorials, and YouTube videos.
+If the goal is a broad question like "How can I get a seat in IIT?", output a proper step-by-step path using real, accurate, and high-quality URLs (e.g., official JEE websites, NTA, IIT portals, Coursera, or top YouTube tutorials). Do NOT use generic placeholder links; use realistic links.
 Resources should specifically target their weak areas or help them achieve their target exam goals.
 Return ONLY a valid JSON array, no markdown.
 

@@ -1,6 +1,7 @@
 import './globals.css';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { AuthProvider } from '@/components/providers/AuthProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -15,6 +16,10 @@ export const viewport = {
 export const metadata: Metadata = {
   title: 'Mentor | AI-Powered Learning Platform',
   description: 'AI-powered retention-first learning system for competitive exams.',
+  icons: {
+    icon: '/Mentor.png',
+    apple: '/Mentor.png',
+  },
 };
 
 export default function RootLayout({
@@ -24,8 +29,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <body className="bg-white text-black font-sans antialiased min-h-screen" suppressHydrationWarning>
-        {children}
+      <body className="bg-background text-foreground font-sans antialiased min-h-screen" suppressHydrationWarning>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

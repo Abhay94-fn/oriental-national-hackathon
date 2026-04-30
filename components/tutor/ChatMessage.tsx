@@ -44,7 +44,7 @@ export function ChatMessage({
                     return <li key={i} className="ml-4 list-disc text-foreground">{line.substring(2)}</li>;
                   }
                   if (line.match(/^\d+\./)) {
-                    return <li key={i} className="ml-4 list-decimal text-foreground font-semibold">{line}</li>;
+                    return <p key={i} className="ml-4 text-foreground font-semibold py-1">{line}</p>;
                   }
                  return <p key={i} className="text-foreground">{line}</p>;
               })}

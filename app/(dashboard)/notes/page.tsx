@@ -4,13 +4,16 @@ import { useState, useRef } from 'react';
 import { useStore } from '../../../store/useStore';
 import { NotesViewer } from '../../../components/notes/NotesViewer';
 import { FileText, Loader2, BookOpen, AlertCircle, UploadCloud, Image as ImageIcon, X, CheckCircle2 } from 'lucide-react';
+import { getSubjectsForExam } from '../../../lib/subjects';
 import Tesseract from 'tesseract.js';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NotesPage() {
   const { profile } = useStore();
   const [topic, setTopic] = useState('');
-  const [subject, setSubject] = useState('Physics');
+  
+  const dynamicSubjects = getSubjectsForExam(profile?.exam);
+  const [subject, setSubject] = useState(dynamicSubjects[0]);
   const [notes, setNotes] = useState('');
   
   const [isLoading, setIsLoading] = useState(false);
@@ -112,12 +115,9 @@ export default function NotesPage() {
                  onChange={(e) => setSubject(e.target.value)}
                  className="w-full bg-card-2 border border-border rounded-xl py-3 px-4 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all appearance-none font-medium text-sm"
                >
-                 <option value="Physics">Physics</option>
-                 <option value="Chemistry">Chemistry</option>
-                 <option value="Mathematics">Mathematics</option>
-                 <option value="Biology">Biology</option>
-                 <option value="Computer Science">Computer Science</option>
-                 <option value="General Studies">General Studies</option>
+                 {dynamicSubjects.map(s => (
+                   <option key={s} value={s}>{s}</option>
+                 ))}
                </select>
              </div>
              <div className="md:col-span-2 space-y-2">

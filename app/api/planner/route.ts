@@ -9,7 +9,9 @@ Generate a scientifically-structured study plan that:
 - Prioritizes weak areas while maintaining strong areas
 - Interleaves subjects to reduce cognitive fatigue (Pomodoro-aligned)
 - Schedules harder topics in morning sessions, revision in evenings
-- Includes mandatory breaks and a weekly mock test
+- Smart Shuffling & Feedback: DO NOT overload a single day. If a day is too heavy, interleave lighter subjects and set the \`motiveTip\` to explicitly warn them (e.g., 'Smart Shuffle: You are overdoing it today! Take it easy.'). If the schedule is too light for their exam countdown, set the \`motiveTip\` to push them (e.g., 'Smart Shuffle: You are not up to the mark today. Push harder!').
+- Smart Session Spacing: NEVER stack "Break" sessions back-to-back. Breaks must be intelligently calculated and placed strictly between intense study sessions (e.g., Learn -> Break -> Revise). Include a weekly mock test.
+- The "One Big Thing" Rule: Every single day MUST contain exactly one (and only one) "High" priority session. This is the hardest, most critical topic of the day. Other sessions must be "Medium" or "Low" priority.
 Return ONLY valid compact JSON, no markdown, no explanation.
 
 Example valid JSON output shape:
@@ -36,7 +38,7 @@ Example valid JSON output shape:
         }
       ],
       "target": "Master 1st Law",
-      "motiveTip": "Start strong!",
+      "motiveTip": "Smart Shuffle: You are overdoing it today! Take it easy.",
       "completionPct": 0
     }
   ],

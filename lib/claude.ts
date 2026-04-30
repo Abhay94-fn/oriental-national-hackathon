@@ -1,30 +1,59 @@
 // Switching to OpenAI-compatible fetch to support KodeKloud proxy
-const API_KEY = process.env.ANTHROPIC_API_KEY || 'sk-9-GlN_uS0ogQ5MooJwkOew';
 const BASE_URL = 'https://api.ai.kodekloud.com/v1/chat/completions';
-export const MODEL = 'claude-sonnet-4-6';
+
+const PROVIDERS = [
+  { model: 'claude-opus-4-7', key: 'sk-SyrCd_d0u54Xde4s87kmSw' },
+  { model: 'google/gemini-3.1-pro-preview', key: 'sk-2VQz2J1ghKscbZrvO8_wZA' },
+  { model: 'minimax/minimax-m2.5', key: 'sk-9-GlN_uS0ogQ5MooJwkOew' },
+  { model: 'claude-haiku-4-5-20251001', key: process.env.ANTHROPIC_API_KEY || 'sk-SBLTLg4CKWfTVi60meRJdA' }
+];
+
+async function fetchWithFallback(bodyBuilder: (model: string) => any, stream: boolean = false) {
+  let lastError: Error | null = null;
+  
+  for (const provider of PROVIDERS) {
+    try {
+      const res = await fetch(BASE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${provider.key}`
+        },
+        body: JSON.stringify({
+          model: provider.model,
+          ...bodyBuilder(provider.model),
+          stream
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error(`API Error with ${provider.model}: ${res.status}`);
+      }
+      
+      return res;
+    } catch (e: any) {
+      lastError = e;
+      console.warn(`Provider failed: ${provider.model}`, e.message);
+      continue; // Try next provider
+    }
+  }
+  
+  throw lastError || new Error('All providers failed');
+}
 
 export async function complete(
   messages: { role: 'user' | 'assistant'; content: string }[],
   system: string,
   maxTokens: number = 2000
 ): Promise<string> {
-  const res = await fetch(BASE_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_KEY}`
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [
-        { role: 'system', content: system },
-        ...messages
-      ],
-      max_tokens: maxTokens
-    })
-  });
+  const res = await fetchWithFallback(() => ({
+    messages: [
+      { role: 'system', content: system },
+      ...messages
+    ],
+    max_tokens: maxTokens
+  }));
 
-  if (!res.ok) throw new Error(`API Error: ${res.status}`);
   const data = await res.json();
   return data.choices?.[0]?.message?.content || '';
 }
@@ -34,23 +63,12 @@ export async function stream(
   system: string,
   onChunk: (text: string) => void
 ): Promise<void> {
-  const res = await fetch(BASE_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_KEY}`
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [
-        { role: 'system', content: system },
-        ...messages
-      ],
-      stream: true
-    })
-  });
-
-  if (!res.ok) throw new Error(`API Error: ${res.status}`);
+  const res = await fetchWithFallback(() => ({
+    messages: [
+      { role: 'system', content: system },
+      ...messages
+    ]
+  }), true);
   
   const reader = res.body?.getReader();
   if (!reader) return;
@@ -83,33 +101,24 @@ export async function completeJSON<T>(
 ): Promise<T> {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const res = await fetch(BASE_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-          model: MODEL,
+      const res = await fetchWithFallback((model) => {
+        // Some models might not support response_format: { type: 'json_object' }
+        // If they throw 400, the fallback logic will automatically try the next model.
+        return {
           messages: [
             { role: 'system', content: system },
             { role: 'user', content: prompt }
           ],
           response_format: { type: 'json_object' }
-        })
+        };
       });
-      
-      if (!res.ok) {
-        if (res.status === 400 && attempt < 2) continue; // Try again
-        throw new Error(`API Error: ${res.status}`);
-      }
       
       const data = await res.json();
       const content = data.choices?.[0]?.message?.content || '{}';
       const clean = content.replace(/```json\n?|```[\w]*\n?|```/g, '').trim();
       return JSON.parse(clean) as T;
     } catch (e) {
-      if (attempt === 2) throw new Error('Failed to parse AI JSON response after 3 attempts');
+      if (attempt === 2) throw new Error('Failed to parse AI JSON response after 3 attempts. Last error: ' + (e as Error).message);
     }
   }
   throw new Error('unreachable');

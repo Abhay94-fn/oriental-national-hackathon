@@ -6,6 +6,7 @@ export interface Profile {
   dailyHours: number;
   streak: number;
   lastActive: string;
+  role?: string;
 }
 
 export interface Concept {
@@ -157,7 +158,7 @@ export interface PathMilestone {
   title: string;
   description: string;
   estimatedHours: number;
-  resources: string[];
+  resources: { title: string; link: string }[];
 }
 
 export interface LearningPhase {

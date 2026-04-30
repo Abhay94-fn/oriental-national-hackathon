@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, Github } from 'lucide-react';
 import Image from 'next/image';
+import MentorLogo from "@/public/Mentor.png";
+import { signIn, useSession } from 'next-auth/react';
 
 // ─── Animated blob background for the visual side ───
 function AnimatedBlobs() {
@@ -27,7 +29,7 @@ function AnimatedBlobs() {
           scale: [1, 0.85, 1.15, 1],
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="auth-blob absolute top-[50%] right-[15%] w-[280px] h-[280px] rounded-full bg-indigo-500/20 blur-[120px]"
+        className="auth-blob absolute top-[50%] right-[15%] w-[280px] h-[280px] rounded-full bg-teal-500/20 blur-[120px]"
       />
       <motion.div
         animate={{
@@ -36,7 +38,7 @@ function AnimatedBlobs() {
           scale: [1, 1.1, 0.9, 1],
         }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="auth-blob absolute bottom-[10%] left-[35%] w-[220px] h-[220px] rounded-full bg-violet-500/20 blur-[80px]"
+        className="auth-blob absolute bottom-[10%] left-[35%] w-[220px] h-[220px] rounded-full bg-emerald-500/20 blur-[80px]"
       />
     </div>
   );
@@ -77,7 +79,7 @@ function VisualSide({ view }: { view: 'login' | 'register' }) {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex items-center justify-center gap-3 mb-6"
           >
-            <Image src="/Mentor.png" alt="Mentor" width={160} height={48} className="h-12 w-auto drop-shadow-md" />
+            <img src={MentorLogo.src} alt="Mentor" className="h-12 w-auto drop-shadow-md" />
           </motion.div>
 
           <motion.h2
@@ -183,8 +185,33 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'student'
   });
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      const existing = JSON.parse(localStorage.getItem('mentor_profile') || '{}');
+      const updatedProfile = {
+        ...existing,
+        name: session.user.name || existing.name || 'Student',
+        email: session.user.email || existing.email,
+        role: existing.role || 'student', // Default to student if not set
+        image: session.user.image
+      };
+      localStorage.setItem('mentor_profile', JSON.stringify(updatedProfile));
+      
+      // Redirect to dashboard
+      if (updatedProfile.role === 'teacher') {
+        router.push('/teacher-dashboard');
+      } else {
+        router.push('/dashboard');
+      }
+      router.refresh();
+    }
+  }, [status, session, router]);
 
   const triggerShake = () => {
     setShake(true);
@@ -204,16 +231,26 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
         const res = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password })
+          body: JSON.stringify({ name: formData.name, email: formData.email, password: formData.password, role: formData.role })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Registration failed');
-        await fetch('/api/auth/login', {
+        const resLogin = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, password: formData.password })
         });
-        router.push('/dashboard');
+        const loginData = await resLogin.json();
+        // Persist role to localStorage so it's available on reload
+        if (loginData.user) {
+          const existing = JSON.parse(localStorage.getItem('mentor_profile') || '{}');
+          localStorage.setItem('mentor_profile', JSON.stringify({ ...existing, role: loginData.user.role, name: loginData.user.name || existing.name }));
+        }
+        if (loginData.user?.role === 'teacher') {
+          router.push('/teacher-dashboard');
+        } else {
+          router.push('/dashboard');
+        }
         router.refresh();
       } else {
         const res = await fetch('/api/auth/login', {
@@ -223,7 +260,16 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Login failed');
-        router.push('/dashboard');
+        // Persist role to localStorage so it's available on reload
+        if (data.user) {
+          const existing = JSON.parse(localStorage.getItem('mentor_profile') || '{}');
+          localStorage.setItem('mentor_profile', JSON.stringify({ ...existing, role: data.user.role, name: data.user.name || existing.name }));
+        }
+        if (data.user?.role === 'teacher') {
+          router.push('/teacher-dashboard');
+        } else {
+          router.push('/dashboard');
+        }
         router.refresh();
       }
     } catch (err: any) {
@@ -236,7 +282,7 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
 
   const switchView = () => {
     setError('');
-    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+    setFormData({ name: '', email: '', password: '', confirmPassword: '', role: 'student' });
     setView(view === 'login' ? 'register' : 'login');
   };
 
@@ -268,7 +314,7 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
           >
             {/* Mobile logo */}
             <motion.div variants={itemVariants} className="md:hidden flex items-center justify-center mb-10">
-              <Image src="/Mentor.png" alt="Mentor" width={140} height={42} className="h-9 w-auto" />
+              <img src={MentorLogo.src} alt="Mentor" className="h-9 w-auto" />
             </motion.div>
 
             {/* Header */}
@@ -396,6 +442,43 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
                 )}
               </AnimatePresence>
 
+              <AnimatePresence>
+                {view === 'register' && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <motion.div variants={itemVariants} className="flex gap-4">
+                      <label className="flex items-center justify-center gap-2 cursor-pointer bg-card-2 p-3 rounded-xl border border-border flex-1 hover:border-primary/50 transition-colors">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="student"
+                          checked={formData.role === 'student'}
+                          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                          className="accent-primary"
+                        />
+                        <span className="text-[14px] font-bold text-foreground">Student</span>
+                      </label>
+                      <label className="flex items-center justify-center gap-2 cursor-pointer bg-card-2 p-3 rounded-xl border border-border flex-1 hover:border-primary/50 transition-colors">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="teacher"
+                          checked={formData.role === 'teacher'}
+                          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                          className="accent-primary"
+                        />
+                        <span className="text-[14px] font-bold text-foreground">Teacher</span>
+                      </label>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               {/* Submit */}
               <motion.div variants={itemVariants} className="pt-2">
                 <button
@@ -433,6 +516,7 @@ export function AuthPage({ initialView = 'login' }: { initialView?: 'login' | 'r
               <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
+                  onClick={() => signIn('google')}
                   className="h-12 flex items-center justify-center gap-2.5 bg-card border border-border rounded-xl text-foreground text-[14px] font-bold transition-all duration-200 hover:bg-card-2 hover:border-border-hover shadow-sm"
                 >
                   <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor">

@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ 
       success: true, 
-      user: { id: user.id, name: user.name, email: user.email, exam: user.exam } 
+      user: { id: user.id, name: user.name, email: user.email, exam: user.exam, role: user.role } 
     });
 
   } catch (error) {

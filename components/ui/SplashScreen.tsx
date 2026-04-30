@@ -2,6 +2,8 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import MentorLogo from "@/public/Mentor.png";
 
 function DiaTextReveal({ text, colors, className }: { text: string; colors: string[]; className?: string }) {
   return (
@@ -59,11 +61,19 @@ export function SplashScreen() {
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background overflow-hidden"
         >
           <div className="relative flex flex-col items-center justify-center p-8">
-            <DiaTextReveal
-              className="text-5xl md:text-7xl font-extrabold tracking-tight text-foreground relative z-20"
-              text="Mentor"
-              colors={["#22d3ee", "#818cf8", "#f472b6", "#34d399"]}
-            />
+            {/* Logo with glow */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="relative z-20 mb-2"
+            >
+              <img
+                src={MentorLogo.src}
+                alt="Mentor"
+                className="w-auto h-20 drop-shadow-2xl"
+              />
+            </motion.div>
 
             <AnimatePresence>
               {showSlogan && (
@@ -78,13 +88,13 @@ export function SplashScreen() {
                 </motion.div>
               )}
             </AnimatePresence>
-            
+
             {/* Background Glow */}
-            <motion.div 
-               initial={{ opacity: 0, scale: 0.5 }}
-               animate={{ opacity: 0.15, scale: 1 }}
-               transition={{ duration: 1.5 }}
-               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-tr from-cyan-400 via-indigo-400 to-pink-400 blur-[100px] rounded-full z-0"
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 0.15, scale: 1 }}
+              transition={{ duration: 1.5 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-tr from-emerald-400 via-teal-400 to-cyan-400 blur-[100px] rounded-full z-0"
             />
           </div>
         </motion.div>

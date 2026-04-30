@@ -4,11 +4,14 @@ import { useState } from 'react';
 import { useStore } from '../../../store/useStore';
 import { EvaluationResult } from '../../../types';
 import { CheckSquare, Loader2, BookOpen, AlertCircle, FileText, ChevronRight } from 'lucide-react';
+import { getSubjectsForExam } from '../../../lib/subjects';
 import ReactMarkdown from 'react-markdown';
 
 export default function EvaluatePage() {
   const { profile } = useStore();
-  const [subject, setSubject] = useState('Physics');
+  
+  const dynamicSubjects = getSubjectsForExam(profile?.exam);
+  const [subject, setSubject] = useState(dynamicSubjects[0]);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [result, setResult] = useState<EvaluationResult | null>(null);
@@ -79,13 +82,9 @@ export default function EvaluatePage() {
                  onChange={(e) => setSubject(e.target.value)}
                  className="w-full bg-surface border border-border rounded-xl py-3 px-4 text-white focus:outline-none focus:border-blue-400 transition-colors appearance-none"
                >
-                 <option value="Physics">Physics</option>
-                 <option value="Chemistry">Chemistry</option>
-                 <option value="Mathematics">Mathematics</option>
-                 <option value="Biology">Biology</option>
-                 <option value="Computer Science">Computer Science</option>
-                 <option value="General Studies">General Studies</option>
-                 <option value="English">English</option>
+                 {dynamicSubjects.map(s => (
+                   <option key={s} value={s}>{s}</option>
+                 ))}
                </select>
              </div>
              

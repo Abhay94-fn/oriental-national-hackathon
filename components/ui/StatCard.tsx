@@ -7,24 +7,23 @@ interface StatCardProps {
   title: string;
   value: string | number;
   icon: LucideIcon;
-  colorClassName?: string;
 }
 
-export function StatCard({ title, value, icon: Icon, colorClassName = 'text-black/60 bg-black/[0.04]' }: StatCardProps) {
+export function StatCard({ title, value, icon: Icon }: StatCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="bg-black/[0.02] border border-black/[0.06] rounded-2xl p-5 hover:bg-black/[0.04] hover:border-black/[0.1] transition-all duration-200 group"
+      className="bg-card border border-border rounded-2xl p-6 hover:bg-card-2 hover:border-primary/30 transition-all duration-200 group shadow-premium"
     >
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-[12px] font-medium text-black/40 uppercase tracking-wider">{title}</p>
-        <div className={`p-2 rounded-lg ${colorClassName} group-hover:scale-105 transition-transform duration-200`}>
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[12px] font-bold text-muted uppercase tracking-widest">{title}</p>
+        <div className="p-2.5 rounded-xl bg-primary/10 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
           <Icon className="w-4 h-4" />
         </div>
       </div>
-      <p className="text-2xl font-semibold text-black tracking-tight">{value}</p>
+      <p className="text-2xl font-extrabold text-foreground tracking-tight">{value}</p>
     </motion.div>
   );
 }

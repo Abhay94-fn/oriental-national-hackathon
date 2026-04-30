@@ -1,11 +1,11 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
-import { stream } from '../../../lib/claude';
+import { ragStream } from '../../../lib/ragAgent';
 import db from '../../../lib/db';
 import { cookies } from 'next/headers';
 import { verifySessionToken } from '../../../lib/auth';
 
-export const runtime = 'nodejs'; // Required for better-sqlite3 but we dont use it here except maybe logging later
+export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const isMentorMode = mode === 'mentor';
 
     const SYSTEM_PROMPT = isMentorMode ?
-`You are an AI Mentor for ${targetExam} aspirants.
+`You are an AI Mentor for students preparing for the ${targetExam}.
 Current Topic: ${subject}
 Language: ${language || 'English'}
 
@@ -31,8 +31,8 @@ STRICT CONSTRAINTS (MENTOR MODE):
 3. Do not start with fluff (no "I appreciate..." or long corrections).
 4. Do not use markdown headers, separators, or decorative blocks.
 5. Keep each reply practical and short (around 80-140 words).
-6. If a question is outside exam syllabus, answer briefly without scolding, then add one line on exam relevance.` :
-`You are a helpful AI Tutor for ${targetExam} aspirants.
+6. If a question is outside ${targetExam} syllabus, answer briefly without scolding, then add one line on exam relevance.` :
+`You are a helpful AI Tutor for students preparing for the ${targetExam}.
 Current Topic: ${subject}
 Language: ${language || 'English'}
 
@@ -41,25 +41,39 @@ STRICT CONSTRAINTS:
 2. Give direct, concise answers first; avoid long meta commentary.
 3. Do not use markdown headers, separators, or decorative blocks.
 4. Keep responses practical, cohesive, and short (around 80-140 words).
-5. If a question is outside exam syllabus, still answer briefly and respectfully, then add one short line on relevance.`;
+5. If a question is outside ${targetExam} syllabus, still answer briefly and respectfully, then add one short line on relevance.`;
 
     const userMessage = messages[messages.length - 1];
     if (userMessage.role === 'user') {
-       db.prepare(`INSERT INTO conversations (user_id, session_id, role, content, subject) VALUES (?, ?, ?, ?, ?)`).run(userId, currentSessionId, 'user', userMessage.content, subject || 'General');
+      db.prepare(`INSERT INTO conversations (user_id, session_id, role, content, subject) VALUES (?, ?, ?, ?, ?)`)
+        .run(userId, currentSessionId, 'user', userMessage.content, subject || 'General');
     }
+
+    // RAG namespace matches how teachers upload (exam::subject)
+    const ragNamespace = `${targetExam}::${subject || 'general'}`.toLowerCase().replace(/\s+/g, '_');
 
     const readable = new ReadableStream({
       async start(controller) {
         const encoder = new TextEncoder();
         let fullResponse = '';
         try {
-          await stream(messages, SYSTEM_PROMPT, (text) => {
-            fullResponse += text;
-            controller.enqueue(encoder.encode(text));
-          });
+          // RAG Pipeline: Retrieve → Augment → Generate
+          await ragStream(
+            messages,
+            SYSTEM_PROMPT,
+            (text) => {
+              fullResponse += text;
+              controller.enqueue(encoder.encode(text));
+            },
+            {
+              namespace: ragNamespace,
+              topK: 4,
+              minSimilarity: 0.15
+            }
+          );
           controller.close();
-          // Save assistant message after stream finishes
-          db.prepare(`INSERT INTO conversations (user_id, session_id, role, content, subject) VALUES (?, ?, ?, ?, ?)`).run(userId, currentSessionId, 'assistant', fullResponse, subject || 'General');
+          db.prepare(`INSERT INTO conversations (user_id, session_id, role, content, subject) VALUES (?, ?, ?, ?, ?)`)
+            .run(userId, currentSessionId, 'assistant', fullResponse, subject || 'General');
         } catch (e) {
           controller.error(e);
         }

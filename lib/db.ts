@@ -30,6 +30,7 @@ export function initializeDB() {
       name TEXT,
       email TEXT UNIQUE,
       password_hash TEXT,
+      role TEXT DEFAULT 'student',
       exam TEXT DEFAULT 'General Competitive Exams',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
@@ -215,6 +216,15 @@ export function initializeDB() {
       if (!e.message.includes('duplicate column name')) {
         console.error(`Migration error for ${table}:`, e.message);
       }
+    }
+  }
+
+  // Migrate users to add role
+  try {
+    db.exec(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'student'`);
+  } catch(e: any) {
+    if (!e.message.includes('duplicate column name')) {
+      console.error(`Migration error for users:`, e.message);
     }
   }
 

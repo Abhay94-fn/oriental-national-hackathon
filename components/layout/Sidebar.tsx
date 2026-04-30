@@ -3,12 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '../../store/useStore';
-import Image from 'next/image';
 import { LayoutDashboard, Brain, CalendarDays, Dumbbell, Bot, Youtube, BookOpen, Route, FileText, CheckSquare, Archive } from 'lucide-react';
+import MentorLogo from "@/public/Mentor.png";
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const MODULES = [
+const STUDENT_MODULES = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { name: 'Recommendations', path: '/recommendations', icon: BookOpen },
   { name: 'Learning Path', path: '/learning-path', icon: Route },
@@ -20,6 +20,10 @@ const MODULES = [
   { name: 'AI Tutor', path: '/tutor', icon: Bot },
   { name: 'Content Lab', path: '/lab', icon: Youtube },
   { name: 'Archive', path: '/archive', icon: Archive },
+];
+
+const TEACHER_MODULES = [
+  { name: 'Teacher Portal', path: '/teacher-dashboard', icon: LayoutDashboard },
 ];
 
 export function Sidebar() {
@@ -39,11 +43,11 @@ export function Sidebar() {
         <AnimatePresence mode="wait">
           {!sidebarCollapsed ? (
             <motion.div key="full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2.5">
-              <Image src="/Mentor.png" alt="Mentor" width={120} height={36} className="h-6 w-auto" />
+              <img src={MentorLogo.src} alt="Mentor" className="h-6 w-auto" />
             </motion.div>
           ) : (
             <motion.div key="mini" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mx-auto">
-              <Image src="/Mentor.png" alt="Mentor" width={28} height={28} className="h-6 w-auto" />
+              <img src={MentorLogo.src} alt="Mentor" className="h-6 w-auto" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -51,7 +55,7 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 custom-scrollbar">
-        {MODULES.map((mod) => {
+        {(profile?.role === 'teacher' ? TEACHER_MODULES : STUDENT_MODULES).map((mod) => {
           const Icon = mod.icon;
           const isActive = pathname.startsWith(mod.path);
           return (
@@ -80,8 +84,16 @@ export function Sidebar() {
           {!sidebarCollapsed && (
             <div className="overflow-hidden flex-1 min-w-0">
               <p className="text-[13px] font-semibold text-foreground truncate">{profile?.exam || 'Exam'}</p>
-              <button onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); localStorage.removeItem('mentor_profile'); useStore.setState({ profile: null }); window.location.href = '/login'; }}
-                className="text-[11px] text-muted hover:text-destructive font-medium transition-colors cursor-pointer text-left">
+              <button
+                id="sign-out-btn"
+                onClick={async () => {
+                  await fetch('/api/auth/logout', { method: 'POST' });
+                  localStorage.removeItem('mentor_profile');
+                  useStore.setState({ profile: null });
+                  window.location.href = '/login';
+                }}
+                className="text-[11px] text-muted-foreground hover:text-red-500 font-semibold transition-colors cursor-pointer text-left w-full py-0.5"
+              >
                 Sign Out
               </button>
             </div>

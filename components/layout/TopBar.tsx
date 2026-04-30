@@ -3,6 +3,9 @@
 import { useStore } from '../../store/useStore';
 import { Menu, Flame } from 'lucide-react';
 
+import Image from 'next/image';
+import MentorLogo from "@/public/Mentor.png";
+
 export function TopBar() {
   const { toggleSidebar, currentModule, profile } = useStore();
 
@@ -28,10 +31,12 @@ export function TopBar() {
       <div className="flex items-center gap-3">
         <button
           onClick={toggleSidebar}
-          className="p-1.5 -ml-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card-2 transition-colors md:inline-flex"
+          className="p-1.5 -ml-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card-2 transition-colors md:hidden"
         >
           <Menu className="w-4 h-4" />
         </button>
+        <img src={MentorLogo.src} alt="Mentor" className="h-5 w-auto md:hidden mr-2" />
+        <div className="h-4 w-px bg-border md:hidden mx-1" />
         <h1 className="text-sm font-bold text-foreground tracking-tight">
           {getTitle()}
         </h1>

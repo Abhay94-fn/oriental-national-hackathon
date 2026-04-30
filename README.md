@@ -1,10 +1,11 @@
 <div align="center">
+  <img src="./public/Mentor.png" alt="Mentor Logo" width="200" />
 
 # 🏆 Mentor
 ### *Guidance when you need it most.*
 
-**🥉 3rd Place — Dev Clash @ Anantya'26, NIT Raipur**
-*Organized by Aavartan | Hosted on Unstop*
+**Oriental TechHack 2.0 National Level Hackathon**
+*Problem Statement 6: AI-powered education assistant*
 
 > 👥 **Team Name:** Tech Stackers
 
@@ -166,25 +167,22 @@ npm run db:reset  # Reset the SQLite database
 
 ## 🏅 Hackathon
 
-This project was built for **Dev Clash**, part of **Anantya'26** — the annual technical fest of **NIT Raipur**, organized by **Aavartan**.
+This project was built for **Oriental TechHack 2.0 National Level Hackathon**.
 
-🥉 **We secured 3rd Place** out of all participating teams.
-
-The challenge demanded a functional, impactful product built within strict time constraints. Mentor was conceived, designed, and shipped from scratch during the hackathon.
-
-**[View the hackathon on Unstop →](https://unstop.com/hackathons/dev-clash-anantya26-events-by-aavartan-national-institute-of-technology-nit-raipur-1655705)**
+The challenge (Statement 6) demanded an AI-powered education assistant for students and teachers. Mentor was conceived, designed, and shipped to address exactly this, providing a comprehensive RAG-powered AI platform with a dedicated Teacher Dashboard and Student Learning Portal.
 
 ---
 
 ## 👥 Team — Tech Stackers
 
-Built with ❤️ by four students who believe better tools make better toppers.
+Built with ❤️ by four students who believe better tools make better learners.
 
 | Name | Role |
 |---|---|
 | **Manish Srivastav** | Team Lead · Backend & Frontend |
 | **Aakash Sarang** | Full Stack & AI Integration |
 | **Shreya Jaiswal** | Frontend, UI/UX & Architecture |
+| **Abhay Dwivedi** | Presenter & Documentation |
 
 ---
 
@@ -192,20 +190,17 @@ Built with ❤️ by four students who believe better tools make better toppers.
 
 | Platform | Link |
 |---|---|
-| Vercel | 👉 [abhay-parth.vercel.app](https://abhay-parth.vercel.app) |
-| Render | 👉 [abhayparth.onrender.com](https://abhayparth.onrender.com) |
+| Vercel | 👉 [mentor-oriental.vercel.app](https://mentor-oriental.vercel.app) |
 
 ---
 
 ## 📄 License
 
-MIT © 2025 Team Mentor — Manish Srivastav, Aakash Sarang & Shreya Jaiswal.
+MIT © 2026 Team Tech Stackers — Manish Srivastav, Aakash Sarang, Shreya Jaiswal & Abhay Dwivedi.
 
 ---
 
 <div align="center">
-
-*"Arjuna didn't become the greatest archer by practicing randomly. He had a system."*
 
 **Mentor gives you that system.**
 

@@ -5,6 +5,8 @@ import { useStore } from '../../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import MentorLogo from "@/public/Mentor.png";
 
 export function OnboardingModal() {
   const { profile, setProfile } = useStore();
@@ -19,6 +21,19 @@ export function OnboardingModal() {
     if (localProfile) {
       const parsedProfile = JSON.parse(localProfile);
       
+      // Teachers skip the student onboarding flow
+      if (parsedProfile.role === 'teacher') {
+        setProfile({ ...parsedProfile, id: parsedProfile.id || 1, exam: parsedProfile.exam || 'Teacher', examDate: parsedProfile.examDate || '', dailyHours: parsedProfile.dailyHours || 0, streak: 0, lastActive: new Date().toISOString() });
+        return;
+      }
+
+      // Check if student has completed onboarding
+      if (!parsedProfile.exam || !parsedProfile.examDate) {
+        if (parsedProfile.name) setName(parsedProfile.name);
+        setIsOpen(true);
+        return;
+      }
+
       // Calculate real-time streak
       const now = new Date();
       const lastActiveDate = new Date(parsedProfile.lastActive);
@@ -59,13 +74,15 @@ export function OnboardingModal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const existing = JSON.parse(localStorage.getItem('mentor_profile') || '{}');
     const newProfile = {
+      ...existing,
       id: 1,
-      name: name || 'Aspirant',
+      name: name || existing.name || 'Aspirant',
       exam,
       examDate: examDate || new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().slice(0, 10),
       dailyHours: parseInt(hours) || 6,
-      streak: 0,
+      streak: existing.streak || 0,
       lastActive: new Date().toISOString()
     };
     localStorage.setItem('mentor_profile', JSON.stringify(newProfile));
@@ -85,10 +102,10 @@ export function OnboardingModal() {
           className="bg-white w-full max-w-md rounded-2xl border border-black/[0.06] overflow-hidden shadow-2xl"
         >
           <div className="bg-black/[0.02] p-6 flex flex-col items-center text-center border-b border-black/[0.06]">
-            <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-              <Rocket className="w-8 h-8 text-white" />
+            <div className="w-full flex items-center justify-center mb-4">
+              <img src={MentorLogo.src} alt="Mentor" className="h-10 w-auto object-contain" />
             </div>
-            <h2 className="text-2xl font-bold text-black tracking-tight mb-2">Welcome to Mentor</h2>
+            <h2 className="text-2xl font-bold text-black tracking-tight mb-2">Welcome</h2>
             <p className="text-sm text-black/60">Let's configure your study engine to maximize retention.</p>
           </div>
 

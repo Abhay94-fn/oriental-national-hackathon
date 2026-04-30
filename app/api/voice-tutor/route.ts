@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import { verifySessionToken } from '../../../lib/auth';
 
 const client = new OpenAI({
-    apiKey: "sk-9-GlN_uS0ogQ5MooJwkOew",
+    apiKey: process.env.ANTHROPIC_API_KEY || "sk-SBLTLg4CKWfTVi60meRJdA",
     baseURL: "https://api.ai.kodekloud.com/v1"
 });
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import MentorLogo from "@/public/Mentor.png";
 import { ArrowRight, Menu, X } from "lucide-react";
 
 export function DynamicIslandNav() {
@@ -39,7 +40,7 @@ export function DynamicIslandNav() {
       >
         <div className="h-14 flex items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Image src="/Mentor.png" alt="Mentor" width={120} height={36} className="h-6 w-auto" priority />
+            <img src={MentorLogo.src} alt="Mentor" className="h-6 w-auto" />
           </Link>
 
           {/* Desktop Links (Hidden when shrunk, unless hovered) */}

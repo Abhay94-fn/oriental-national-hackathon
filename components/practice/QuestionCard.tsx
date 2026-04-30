@@ -32,14 +32,14 @@ export function QuestionCard({
 
   const getOptionClass = (opt: string) => {
     if (!isAnswered) {
-       return selected === opt ? 'bg-primary/20 border-primary text-white' : 'bg-surface border-border hover:border-primary/50 text-gray-300';
+       return selected === opt ? 'bg-primary/20 border-primary text-foreground' : 'bg-surface border-border hover:border-primary/50 text-foreground/70';
     }
     const isCorrectOpt = opt.startsWith(question.correct);
     const isSelectedOpt = selected === opt;
 
-    if (isCorrectOpt) return 'bg-green-500/20 border-green-500 text-white';
-    if (isSelectedOpt && !isCorrectOpt) return 'bg-red-500/20 border-red-500 text-white';
-    return 'bg-surface/50 border-border text-gray-500 opacity-50';
+    if (isCorrectOpt) return 'bg-green-500/20 border-green-500 text-foreground';
+    if (isSelectedOpt && !isCorrectOpt) return 'bg-red-500/20 border-red-500 text-foreground';
+    return 'bg-surface/50 border-border text-muted-foreground opacity-50';
   };
 
   return (
@@ -66,7 +66,7 @@ export function QuestionCard({
              <div className="mt-1 bg-surface p-2 rounded-lg border border-border shrink-0 text-muted">
                <Hash className="w-4 h-4" />
              </div>
-             <h3 className="text-lg md:text-xl font-sora font-semibold text-white leading-relaxed">
+             <h3 className="text-lg md:text-xl font-sora font-semibold text-foreground leading-relaxed">
                {question.question}
              </h3>
           </div>
@@ -95,9 +95,9 @@ export function QuestionCard({
                   <span className={selected?.startsWith(question.correct) ? 'text-green-400' : 'text-red-400'}>
                     {selected?.startsWith(question.correct) ? 'Correct!' : 'Incorrect.'}
                   </span>
-                  <span className="text-white ml-2">Explanation</span>
+                  <span className="text-foreground ml-2">Explanation</span>
                 </h4>
-                <div className="prose prose-invert max-w-none text-sm text-gray-300">
+                <div className="prose prose-invert max-w-none text-sm text-foreground/80">
                   <p>{question.explanation}</p>
                 </div>
                 <div className="mt-6 flex justify-end gap-3">

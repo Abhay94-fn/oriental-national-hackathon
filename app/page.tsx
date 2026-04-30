@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import Image from 'next/image';
+import MentorLogo from "@/public/Mentor.png";
 import { BrainCircuit, LineChart, CheckCircle2, Zap, Target, Sparkles, ArrowRight, Plus } from 'lucide-react';
 import { SplashScreen } from '../components/ui/SplashScreen';
 import { DynamicIslandNav } from '../components/layout/DynamicIslandNav';
@@ -112,7 +113,7 @@ export default function LandingPage() {
           <section className="max-w-7xl mx-auto px-6 pt-24 pb-16 lg:pt-32 lg:pb-24 grid lg:grid-cols-12 gap-16 items-center min-h-[85vh]">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="space-y-8 lg:col-span-5 relative z-10">
               
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-[12px] font-bold tracking-wide uppercase shadow-[0_0_15px_rgba(79,70,229,0.1)]">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-[12px] font-bold tracking-wide uppercase shadow-[0_0_15px_rgba(79,70,229,0.1)] mb-4">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
@@ -120,9 +121,13 @@ export default function LandingPage() {
                 Now in public beta
               </div>
 
+              <div className="mb-2">
+                <img src={MentorLogo.src} alt="Mentor" className="h-16 w-auto object-contain" />
+              </div>
+
               <h1 className="text-[clamp(3rem,6vw,5rem)] font-extrabold tracking-[-0.04em] leading-[1.05]">
                 The AI Mentor<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-500 to-violet-500">You Deserve.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-teal-500 to-emerald-500">You Deserve.</span>
               </h1>
 
               <p className="text-[17px] text-muted-foreground max-w-lg leading-relaxed font-medium">
@@ -155,7 +160,7 @@ export default function LandingPage() {
             </motion.div>
 
             <div className="lg:col-span-7 relative z-10 w-full">
-               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-violet-500/20 blur-3xl -z-10 rounded-full transform scale-90 translate-y-10" />
+               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-teal-500/20 blur-3xl -z-10 rounded-full transform scale-90 translate-y-10" />
                <MockBrowserWindow title="terminal — mentor">
                  <TerminalBlock />
                </MockBrowserWindow>
@@ -256,7 +261,7 @@ export default function LandingPage() {
         <footer className="border-t border-border bg-card/50 py-12">
           <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
-              <Image src="/Mentor.png" alt="Mentor" width={100} height={30} className="h-6 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
+              <img src={MentorLogo.src} alt="Mentor" className="h-6 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all" />
             </div>
             <div className="flex items-center gap-8 text-sm font-semibold text-muted-foreground">
               <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>

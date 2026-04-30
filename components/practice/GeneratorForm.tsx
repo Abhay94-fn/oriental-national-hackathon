@@ -53,7 +53,7 @@ export function GeneratorForm({ onGenerate, isGenerating }: Props) {
        
        <div className="mb-8 relative z-10">
           <div className="flex items-center gap-3 mb-2">
-            <h2 className="text-2xl font-sora font-bold text-white flex items-center gap-2">
+            <h2 className="text-2xl font-sora font-bold text-foreground flex items-center gap-2">
               <Target className="w-6 h-6 text-teal-400" /> Adaptive Test Engine
             </h2>
             {profile?.exam && (
@@ -139,7 +139,7 @@ export function GeneratorForm({ onGenerate, isGenerating }: Props) {
               value={topic}
               onChange={e => setTopic(e.target.value)}
               placeholder="Leave blank for mixed syllabus, or type 'Thermodynamics'"
-              className="w-full bg-surface border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-shadow"
+              className="w-full bg-surface border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400 transition-shadow"
             />
           </div>
        </div>
